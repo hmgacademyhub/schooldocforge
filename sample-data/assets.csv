@@ -1,0 +1,7 @@
+id,name,tag,cat,custodian,acquired,cost,life,condition
+,Dell Latitude 3520 Laptop,AST-IT-001,IT,Mr. Ojo,2023-01-15,380000,4,Good
+,HP LaserJet Pro M404 Printer,AST-IT-002,IT,Mr. Ojo,2023-03-10,180000,5,Good
+,Student Desk (set of 30),AST-FUR-010,Furniture,Mrs. Adeyemi,2022-08-20,450000,10,Fair
+,Whiteboard 4x6,AST-FUR-022,Furniture,Mrs. Adeyemi,2022-08-20,28000,7,Good
+,Microscope Olympus CX23,AST-LAB-005,Lab,Mr. Obi,2024-02-05,220000,8,New
+,Generator 5KVA Honda,AST-GEN-001,Power,Mr. Ojo,2021-06-12,950000,10,Good

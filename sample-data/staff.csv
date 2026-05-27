@@ -1,0 +1,6 @@
+id,name,position,dept,phone,email,dob,salary,status
+,Mrs. Folake Adeyemi,Principal,Administration,08011112222,principal@school.edu.ng,1978-04-12,250000,Active
+,Mr. Yakubu Sani,Vice-Principal,Administration,08022223333,vp@school.edu.ng,1980-07-22,200000,Active
+,Mr. Chuka Obi,Mathematics Teacher,Mathematics,08033334444,chuka@school.edu.ng,1985-11-03,120000,Active
+,Mrs. Bisi Owolabi,English Teacher,Languages,08044445555,bisi@school.edu.ng,1987-02-18,120000,Active
+,Mr. Ade Ojo,Bursar,Accounts,08055556666,bursar@school.edu.ng,1979-09-09,150000,Active

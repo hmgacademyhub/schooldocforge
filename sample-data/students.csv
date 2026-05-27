@@ -1,0 +1,6 @@
+id,name,class,admNo,gender,dob,phone,guardian,gphone,addr,fees,paid
+,Adaeze Okafor,JSS1,GA/2024/001,Female,2012-03-15,,Mr. Okafor,08012345678,12 Allen Avenue Ikeja,75000,50000
+,Ibrahim Musa,JSS1,GA/2024/002,Male,2011-09-22,,Mrs. Musa,08087654321,5 Awolowo Way Ikeja,75000,75000
+,Tolu Adesina,JSS2,GA/2023/045,Female,2010-12-01,,Mr. Adesina,08023456789,18 Opebi Road,80000,40000
+,Chinedu Eze,SSS1,GA/2022/103,Male,2009-06-10,,Mrs. Eze,08034567890,7 Maryland Crescent,95000,95000
+,Aisha Bello,Primary 5,GA/2024/120,Female,2014-01-25,,Mr. Bello,08045678901,22 Toyin Street,55000,20000
