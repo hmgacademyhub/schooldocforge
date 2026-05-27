@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SchoolDocForge v7 Enterprise Plus — Complete School Operations Suite</title>
+  <meta name="description" content="40+ school document types. Students, Staff, Fees, Attendance, Library, Inventory, Clinic, Transport, Cafeteria, Hostel, Homework, Quiz, KPI, Multi-Branch. PWA Offline. 100% Free. No AI API."/>
+  <meta name="author" content="Adewale Samson Adeagbo (original) · Enterprise Enhancement Layer v6"/>
+  <meta name="theme-color" content="#1a2e4a"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Merriweather:wght@400;700&family=Lato:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet"/>
+  <!-- All FREE CDN libs (MIT licensed) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<a class="skip-link" href="#generator">Skip to Generator</a>
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar-fill"></div></div>
+<div class="announcement-banner" id="announcement-banner" style="display:none;"><span id="announcement-text"></span><button class="announcement-close" onclick="dismissBanner()">✕</button></div>
+
+<!-- BRANCH BAR (v6) -->
+<div class="branch-bar" id="branch-bar">
+  <span>🏢 Branch:</span>
+  <select id="branch-select" onchange="switchBranch(this.value)"><option value="main">Main Campus</option></select>
+  <button class="btn-sm" onclick="addBranch()" style="background:#fff;color:#000;border:none;padding:.25rem .6rem;border-radius:6px;cursor:pointer;">+ Add</button>
+  <span class="branch-tag" id="active-branch-tag">MAIN</span>
+  <span style="margin-left:auto" class="lang-switch">
+    🌐 <select id="lang-select" onchange="setLanguage(this.value)">
+      <option value="en">English</option>
+      <option value="yo">Yorùbá</option>
+      <option value="ha">Hausa</option>
+      <option value="ig">Igbo</option>
+      <option value="fr">Français</option>
+    </select>
+  </span>
+  <button class="btn-sm" onclick="toggleLock()" title="Lock app" style="background:#fff;color:#000;border:none;padding:.25rem .6rem;border-radius:6px;cursor:pointer;">🔒 Lock</button>
+  <span class="gsearch-wrap" style="position:relative;margin-left:.5rem;">
+    <input id="gsearch" placeholder="🔍 Global search…" style="border:none;padding:.3rem .6rem;border-radius:6px;font-size:.8rem;width:180px;"/>
+    <div id="gsearch-results" class="gsearch-results" style="display:none;"></div>
+  </span>
+  <select id="theme-select" onchange="setTheme(this.value)" title="Theme" style="background:#fff;color:#000;border:none;padding:.25rem .4rem;border-radius:6px;font-size:.8rem;margin-left:.4rem;"><option value="light">☀️ Light</option><option value="dark">🌙 Dark</option><option value="sepia">📜 Sepia</option><option value="hc">🔲 High-Contrast</option><option value="solarized">🌅 Solarized</option></select>
+  <select id="currency-select" onchange="setCurrency(this.value)" title="Currency" style="background:#fff;color:#000;border:none;padding:.25rem .4rem;border-radius:6px;font-size:.8rem;margin-left:.3rem;"></select>
+  <button class="btn-sm" onclick="enableNotifications()" title="Browser notifications" style="background:#fff;color:#000;border:none;padding:.25rem .5rem;border-radius:6px;cursor:pointer;">🔔</button>
+  <button class="btn-sm" onclick="showSyncQR()" title="Device sync via QR" style="background:#fff;color:#000;border:none;padding:.25rem .5rem;border-radius:6px;cursor:pointer;">📱 Sync</button>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#hero"><span class="brand-icon">🏛️</span><span class="brand-name">SchoolDoc<span class="accent">Forge</span></span><span class="version-badge">v7 ENTERPRISE+</span></a>
+    <nav class="nav-links" id="nav-links">
+      <a href="#features">Features</a><a href="#generator">Generator</a><a href="#students">Students</a><a href="#staff">Staff</a><a href="#fees">Fees</a><a href="#attendance">Attendance</a><a href="#library">Library</a><a href="#inventory">Inventory</a><a href="#clinic">Clinic</a><a href="#transport">Transport</a><a href="#cafeteria">Cafeteria</a><a href="#hostel">Hostel</a><a href="#homework">Homework</a><a href="#exam-bank">Exams</a><a href="#quiz">Quiz</a><a href="#timetable">Timetable</a><a href="#discipline">Discipline</a><a href="#visitors">Visitors</a><a href="#calendar">Calendar</a><a href="#kpi-section">KPI</a><a href="#expenses">Expenses</a><a href="#notes">Notes</a><a href="#stats-section">Stats</a><a href="#about">About</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-icon-hdr" onclick="document.getElementById('print-queue').scrollIntoView({behavior:'smooth'})">🖨️</button>
+      <button class="btn-icon-hdr" onclick="toggleKbdHelp()">⌨️</button>
+      <button class="btn-icon-hdr" id="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+      <button class="nav-cta" onclick="document.getElementById('generator').scrollIntoView({behavior:'smooth'})">Start Generating ↗</button>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="document.getElementById('mobile-nav').classList.add('open');document.getElementById('mobile-nav-overlay').classList.add('open');">☰</button>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobile-nav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+  <a href="#features" onclick="closeMobileNav()">Features</a>
+  <a href="#generator" onclick="closeMobileNav()">Generator</a>
+  <a href="#templates-gallery" onclick="closeMobileNav()">Templates</a>
+  <a href="#students" onclick="closeMobileNav()">Students</a>
+  <a href="#staff" onclick="closeMobileNav()">Staff</a>
+  <a href="#fees" onclick="closeMobileNav()">Fees</a>
+  <a href="#attendance" onclick="closeMobileNav()">Attendance</a>
+  <a href="#library" onclick="closeMobileNav()">Library</a>
+  <a href="#inventory" onclick="closeMobileNav()">Inventory</a>
+  <a href="#timetable" onclick="closeMobileNav()">Timetable</a>
+  <a href="#discipline" onclick="closeMobileNav()">Discipline</a>
+  <a href="#visitors" onclick="closeMobileNav()">Visitors</a>
+  <a href="#exam-bank" onclick="closeMobileNav()">Exam Bank</a>
+  <a href="#bulk-tools" onclick="closeMobileNav()">Bulk</a>
+  <a href="#print-queue" onclick="closeMobileNav()">Queue</a>
+  <a href="#stats-section" onclick="closeMobileNav()">Stats</a>
+  <a href="#audit" onclick="closeMobileNav()">Audit Log</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+</div>
+<div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileNav()"></div>
+
+<!-- KBD PANEL -->
+<div class="kbd-panel" id="kbd-panel" style="display:none;">
+  <div class="kbd-panel-inner"><div class="kbd-panel-title">⌨️ Shortcuts</div><button class="kbd-panel-close" onclick="toggleKbdHelp()">✕</button>
+  <div class="kbd-grid">
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>D</kbd><span>Dark mode</span></div>
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>K</kbd><span>Shortcuts</span></div>
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>G</kbd><span>Jump to Generator</span></div>
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>S</kbd><span>Save profile</span></div>
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>P</kbd><span>Print</span></div>
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>Q</kbd><span>Add to queue</span></div>
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>T</kbd><span>Save template</span></div>
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>B</kbd><span>Full backup</span></div>
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>L</kbd><span>Lock (v6)</span></div>
+    <div class="kbd-row"><kbd>Alt</kbd>+<kbd>1–4</kbd><span>Go to step</span></div>
+    <div class="kbd-row"><kbd>Esc</kbd><span>Close panels</span></div>
+  </div></div>
+</div>
+<canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;display:none;"></canvas>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"><div class="hero-grid"></div><div class="hero-glow glow-1"></div><div class="hero-glow glow-2"></div></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Free · PWA · 40+ Docs · 20+ Modules · Multi-Branch · Library · Clinic · Transport · Hostel · Quiz · No AI API</div>
+    <h1 class="hero-title" data-i18n="hero_title">Professional School<br/><em>Operations Platform</em><br/>in One Free App</h1>
+    <p class="hero-sub" data-i18n="hero_sub">Generate documents. Manage students, staff, fees, attendance, library, inventory, timetables, discipline & visitors. All branded. All offline-capable. All free.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('generator').scrollIntoView({behavior:'smooth'})">🔨 Forge Documents</button>
+      <button class="btn-ghost" onclick="document.getElementById('students').scrollIntoView({behavior:'smooth'})">👨‍🎓 Student Records →</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">40+</span><span class="stat-label">Doc Types</span></div><div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">20+</span><span class="stat-label">Modules</span></div><div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">PWA</span><span class="stat-label">Offline</span></div><div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">₦0</span><span class="stat-label">Cost</span></div>
+    </div>
+  </div>
+  <div class="hero-visual"><div class="doc-stack"><div class="doc-card doc-card-back"></div><div class="doc-card doc-card-mid"></div><div class="doc-card doc-card-front"><div class="mock-doc"><div class="mock-header"><div class="mock-logo-circle"></div><div class="mock-school-lines"><div class="mock-line mock-line-lg"></div><div class="mock-line mock-line-sm"></div></div></div><div class="mock-divider"></div><div class="mock-body"><div class="mock-line"></div><div class="mock-line mock-line-80"></div><div class="mock-line mock-line-60"></div><div class="mock-line"></div><div class="mock-line mock-line-70"></div></div><div class="mock-seal">✦</div></div></div></div></div>
+</section>
+
+<!-- BIRTHDAY WIDGET (v6, populated by JS) -->
+<div style="max-width:1180px;margin:1rem auto 0;padding:0 1rem;">
+  <div id="bday-widget"></div>
+</div>
+
+<!-- FEATURES -->
+<section class="features-section" id="features"><div class="section-container">
+  <div class="section-header"><span class="section-tag">PLATFORM FEATURES</span><h2 class="section-title">Enterprise-Grade School Tools — Zero Cost</h2><p class="section-sub">Everything a school administrator, EdTech builder, or principal needs in one platform.</p></div>
+  <div class="features-grid">
+    <!-- Original cards preserved -->
+    <div class="feature-card feature-card-large"><div class="feature-icon">📋</div><h3>School Profile System</h3><p>Up to 10 named profiles. Name, motto, type, address, phone, email, website, accreditation, principal, vice-principal, bank details, logo, brand colours, document font. Full backup/restore.</p></div>
+    <div class="feature-card"><div class="feature-icon">📶</div><h3>PWA Offline</h3><p>Service worker caches everything. Install to home screen. Works fully offline.</p></div>
+    <div class="feature-card"><div class="feature-icon">👁️‍🗨️</div><h3>Live Preview</h3><p>Updates as you type. 300ms debounce. Collapsible.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔤</div><h3>Font Selector</h3><p>Georgia, Merriweather, Lato, Playfair Display.</p></div>
+    <div class="feature-card"><div class="feature-icon">💧</div><h3>Watermark</h3><p>DRAFT, COPY, CONFIDENTIAL, SAMPLE or custom text with opacity control.</p></div>
+    <div class="feature-card"><div class="feature-icon">📱</div><h3>QR Codes</h3><p>On ID cards. Encodes school website, student ID, or custom text.</p></div>
+    <div class="feature-card"><div class="feature-icon">📦</div><h3>Bulk ZIP</h3><p>Bulk-generate from CSV, download as ZIP via JSZip.</p></div>
+    <div class="feature-card"><div class="feature-icon">⌨️</div><h3>Keyboard Shortcuts</h3><p>Alt+G/S/P/D/K/Q/T/B/L/1-4/Esc.</p></div>
+
+    <div class="feature-card feature-new"><div class="feature-badge-new">ENTERPRISE</div><div class="feature-icon">👨‍🎓</div><h3>Student Records</h3><p>Full CRUD database. CSV import/export. Search. Filter by class. Per-profile storage.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">ENTERPRISE</div><div class="feature-icon">👨‍🏫</div><h3>Staff Records</h3><p>Full CRUD. CSV import/export. Search. Department groups.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">ENTERPRISE</div><div class="feature-icon">💰</div><h3>Fee Management</h3><p>Track student fees. Record payments. View balances. Generate receipts.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">ENTERPRISE</div><div class="feature-icon">📅</div><h3>Attendance Tracker</h3><p>Mark daily attendance by class. Export reports. Present/absent/late.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">ENTERPRISE</div><div class="feature-icon">⚡</div><h3>Batch from Records</h3><p>Generate documents for all students/staff. Progress bar.</p></div>
+    <div class="feature-card"><div class="feature-icon">📄</div><h3>Templates Gallery</h3><p>Save customised documents as named templates. Reload instantly.</p></div>
+    <div class="feature-card"><div class="feature-icon">🖨️</div><h3>Print Queue</h3><p>Add documents to queue. Print all in one job.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔍</div><h3>History Search</h3><p>Real-time keyword search + type filter.</p></div>
+
+    <!-- v6 NEW CARDS -->
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">🏢</div><h3>Multi-Branch Support</h3><p>Manage multiple campuses/branches with isolated data per branch. Switch instantly.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">📚</div><h3>Library Management</h3><p>Catalog books, track borrow/return, auto-calc overdue fines.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">📦</div><h3>Inventory / Asset Register</h3><p>Track school assets, custodians, condition, depreciation.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">📝</div><h3>Exam Question Bank</h3><p>Store questions per subject/class. Auto-generate randomized exam papers (no AI).</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">🗓️</div><h3>Class Timetable Builder</h3><p>Drag-friendly grid with conflict detection for teachers & rooms.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">⚖️</div><h3>Discipline Log</h3><p>Track incidents and merit points per student. Generate parent notices.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">🚪</div><h3>Visitor Log</h3><p>Sign in/out visitors. Print badge. Daily security report.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">🎓</div><h3>Cumulative Transcript</h3><p>Multi-term/multi-session transcript with grade aggregation.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">📢</div><h3>WhatsApp Blast</h3><p>Bulk wa.me message links — free, no SMS API needed.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">🔒</div><h3>PIN Lock & Encryption</h3><p>4-digit PIN gate + AES backup encryption via Web Crypto.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">🌐</div><h3>Multilingual UI</h3><p>English · Yoruba · Hausa · Igbo · French — switch instantly.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">📊</div><h3>SVG Charts</h3><p>Pure-SVG analytics — no library bloat. Renders offline.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">🪵</div><h3>Audit Log</h3><p>Every CRUD action logged locally with timestamp.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v6 NEW</div><div class="feature-icon">🎂</div><h3>Birthday Alerts</h3><p>Auto-detect students/staff birthdays this week.</p></div>
+    
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🏥</div><h3>Clinic Records (SOAP)</h3><p>Structured SOAP notes per student, vaccinations, allergies, medication.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🚌</div><h3>Transport Routes</h3><p>Buses, drivers, student assignments, daily rosters, bus passes with QR.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🍱</div><h3>Cafeteria Menus</h3><p>Weekly menu editor, printable poster, batch meal tickets.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🏠</div><h3>Hostel Management</h3><p>Rooms with bed capacity, colour-coded occupancy, assign students.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">📚</div><h3>Homework Tracker</h3><p>Assignments per class, track each student\'s submission status.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🎯</div><h3>Quiz Player</h3><p>Browser-based quiz from question bank, auto-graded, no AI.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">📈</div><h3>KPI Dashboard</h3><p>Targets for enrolment, fees, attendance, overdue books.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🧾</div><h3>Expense Tracker</h3><p>Income vs expense, by category, with method &amp; reference.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🗒️</div><h3>Sticky Notes</h3><p>Quick reminders board with pastel colours.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🔍</div><h3>Global Search</h3><p>Search across students, staff, books, assets, clinic, questions, notes.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">📱</div><h3>Device Sync (QR)</h3><p>Transfer data between devices via QR — no cloud needed.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">📅</div><h3>Event Calendar</h3><p>Month-view calendar with click-to-add events per day.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🎨</div><h3>5 Themes</h3><p>Light, Dark, Sepia, High-Contrast, Solarized.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🔔</div><h3>Browser Notifications</h3><p>Birthday alerts &amp; overdue book pings via Notification API.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🌍</div><h3>Multi-Currency</h3><p>₦ NGN, GH₵, KSh, R, CFA, $, £, € display.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🏆</div><h3>Honor Roll</h3><p>Top 10 students by average score.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🪪</div><h3>Bulk QR</h3><p>Generate 100+ QR codes at once, download as ZIP.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🔢</div><h3>Auto-ID Generator</h3><p>Sequential admission numbers / staff IDs.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🧮</div><h3>GPA / CGPA Calculator</h3><p>NG-4, NG-5, UK Honours, US scales.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">📧</div><h3>Email Blast (mailto)</h3><p>Free mailto-based broadcast — no SMTP server needed.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">📊</div><h3>Trend Line Charts</h3><p>Fees over time as pure-SVG line chart.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">📦</div><h3>Data Bundle Export</h3><p>One-click ZIP of all CSVs for archival.</p></div>
+    <div class="feature-card feature-new"><div class="feature-badge-new">v7 NEW</div><div class="feature-icon">🎓</div><h3>Interactive Tour</h3><p>First-visit walkthrough of the whole platform.</p></div>
+
+    <div class="feature-card"><div class="feature-icon">📢</div><h3>Announcement Banner</h3><p>Dismissible info bar. Set from profile section.</p></div>
+    <div class="feature-card"><div class="feature-icon">🎉</div><h3>Confetti</h3><p>Canvas particle burst on generation.</p></div>
+    <div class="feature-card"><div class="feature-icon">🤝</div><h3>Social Share</h3><p>Twitter/X, WhatsApp, LinkedIn, Facebook.</p></div>
+    <div class="feature-card"><div class="feature-icon">♿</div><h3>Accessibility</h3><p>Skip link, reduced-motion, focus management, ARIA.</p></div>
+  </div>
+</div></section>
+
+<!-- GENERATOR -->
+<section class="generator-section" id="generator"><div class="section-container">
+  <div class="section-header"><span class="section-tag">DOCUMENT GENERATOR</span><h2 class="section-title">Forge Your Document</h2><p class="section-sub">4 steps: Profile → Type → Customise → Download.</p></div>
+  <div class="step-tabs" role="tablist">
+    <button class="step-tab active" data-step="1" onclick="goToStep(1)"><span class="step-num">01</span><span class="step-label">Profile</span></button><div class="step-connector"></div>
+    <button class="step-tab" data-step="2" onclick="goToStep(2)"><span class="step-num">02</span><span class="step-label">Type</span></button><div class="step-connector"></div>
+    <button class="step-tab" data-step="3" onclick="goToStep(3)"><span class="step-num">03</span><span class="step-label">Customise</span></button><div class="step-connector"></div>
+    <button class="step-tab" data-step="4" onclick="goToStep(4)"><span class="step-num">04</span><span class="step-label">Download</span></button>
+  </div>
+  <div class="generator-body">
+    <!-- STEP 1: PROFILE -->
+    <div class="gen-step active" id="step-1"><div class="step-content">
+      <h2 class="step-heading" tabindex="-1">🏫 School Profile</h2>
+      <p class="step-sub">Saved in browser localStorage only. Never sent anywhere.</p>
+      <div class="saved-profiles-bar">
+        <label class="form-label" for="saved-profiles-select">Profiles:</label>
+        <select id="saved-profiles-select" onchange="loadSavedProfile(this.value)"><option value="">— Select —</option></select>
+        <button class="btn-sm" onclick="saveCurrentProfile()">💾 Save</button>
+        <button class="btn-sm" onclick="duplicateProfile()">📋 Duplicate</button>
+        <button class="btn-sm btn-danger" onclick="deleteCurrentProfile()">🗑 Delete</button>
+        <button class="btn-sm" onclick="exportProfile()">📤 Export</button>
+        <button class="btn-sm" onclick="document.getElementById('import-profile-input').click()">📥 Import</button>
+        <input type="file" id="import-profile-input" accept=".json" style="display:none" onchange="importProfile(event)"/>
+        <button class="btn-sm" onclick="fullBackup()" style="margin-left:.5rem;">🗄️ Backup</button>
+        <button class="btn-sm" onclick="document.getElementById('full-restore-input').click()">🔄 Restore</button>
+        <input type="file" id="full-restore-input" accept=".json,.enc" style="display:none" onchange="fullRestore(event)"/>
+        <label style="display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;margin-left:.5rem;"><input type="checkbox" id="encrypt-backup"/> Encrypt backup (v6)</label>
+      </div>
+      <div class="announce-admin-bar">
+        <label class="form-label" style="margin:0;">📢 Banner:</label>
+        <input type="text" id="announce-input" class="form-input" placeholder="e.g. New Term starts Sept 15" style="flex:1;min-width:200px;"/>
+        <button class="btn-sm" onclick="setBanner()">Set</button>
+        <button class="btn-sm btn-danger" onclick="clearBanner()">Clear</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group form-group-full"><label class="form-label">School Name <span class="required">*</span></label><input class="form-input" type="text" id="school-name" placeholder="e.g. Greenfield Academy"/></div>
+        <div class="form-group"><label class="form-label">Motto</label><input class="form-input" type="text" id="school-motto" placeholder="Knowledge, Integrity, Excellence"/></div>
+        <div class="form-group"><label class="form-label">Type</label><select class="form-input" id="school-type"><option>Nursery School</option><option>Primary School</option><option>Secondary School</option><option>Nursery &amp; Primary</option><option>Primary &amp; Secondary</option><option>Nursery, Primary &amp; Secondary</option><option>Tertiary</option><option>Vocational</option><option>Tutorial Centre</option><option>Islamic School</option><option>Special Needs</option></select></div>
+        <div class="form-group form-group-full"><label class="form-label">Address <span class="required">*</span></label><input class="form-input" type="text" id="school-address" placeholder="Street address"/></div>
+        <div class="form-group"><label class="form-label">City / LGA</label><input class="form-input" type="text" id="school-city" placeholder="Ikeja"/></div>
+        <div class="form-group"><label class="form-label">State</label><select class="form-input" id="school-state"><option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option><option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option><option>Ekiti</option><option>Enugu</option><option>Abuja (FCT)</option><option>Gombe</option><option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option><option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option><option selected>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option><option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option><option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option></select></div>
+        <div class="form-group"><label class="form-label">Phone <span class="required">*</span></label><input class="form-input" type="tel" id="school-phone" placeholder="0801 234 5678"/></div>
+        <div class="form-group"><label class="form-label">Phone 2</label><input class="form-input" type="tel" id="school-phone2" placeholder="0901 234 5678"/></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" id="school-email" placeholder="admin@school.edu.ng"/></div>
+        <div class="form-group"><label class="form-label">Website</label><input class="form-input" type="text" id="school-website" placeholder="www.school.edu.ng"/></div>
+        <div class="form-group"><label class="form-label">Reg / Accreditation</label><input class="form-input" type="text" id="school-reg-no" placeholder="MoE/LAG/2015/00123"/></div>
+        <div class="form-group"><label class="form-label">Principal / Head</label><input class="form-input" type="text" id="school-principal" placeholder="Mr. John Okafor"/></div>
+        <div class="form-group"><label class="form-label">Vice-Principal</label><input class="form-input" type="text" id="school-vice-principal" placeholder="Mrs. Amaka Eze"/></div>
+        <div class="form-group"><label class="form-label">Year Founded</label><input class="form-input" type="number" id="school-founded" placeholder="2005" min="1800" max="2030"/></div>
+        <div class="form-group"><label class="form-label">Session</label><input class="form-input" type="text" id="school-session" placeholder="2024/2025"/></div>
+        <div class="form-group"><label class="form-label">Term</label><select class="form-input" id="school-term"><option>First Term</option><option>Second Term</option><option>Third Term</option></select></div>
+        <div class="form-group"><label class="form-label">Bank Name</label><input class="form-input" type="text" id="school-bank-name" placeholder="GTBank"/></div>
+        <div class="form-group"><label class="form-label">Account Name</label><input class="form-input" type="text" id="school-account-name" placeholder="Greenfield Academy"/></div>
+        <div class="form-group"><label class="form-label">Account Number</label><input class="form-input" type="text" id="school-account-no" placeholder="0123456789"/></div>
+        <div class="form-group"><label class="form-label">Primary Colour</label><input type="color" id="school-primary-color" value="#1a2e4a" class="form-input"/></div>
+        <div class="form-group"><label class="form-label">Accent Colour</label><input type="color" id="school-accent-color" value="#c9921a" class="form-input"/></div>
+        <div class="form-group"><label class="form-label">Document Font</label><select class="form-input" id="school-doc-font"><option value="Georgia, serif">Georgia</option><option value="Merriweather, serif">Merriweather</option><option value="Lato, sans-serif">Lato</option><option value="Playfair Display, serif">Playfair Display</option></select></div>
+        <div class="form-group form-group-full"><label class="form-label">Logo (PNG/JPG/SVG)</label><input type="file" id="school-logo-input" accept="image/*" class="form-input" onchange="handleLogoUpload(event)"/><div id="logo-preview"></div></div>
+      </div>
+      <div class="step-actions"><button class="btn-primary" onclick="goToStep(2)">Choose Document Type →</button></div>
+    </div></div>
+
+    <!-- STEP 2: TYPE -->
+    <div class="gen-step" id="step-2"><div class="step-content">
+      <h2 class="step-heading" tabindex="-1">📑 Choose Document Type</h2>
+      <p class="step-sub">30+ document types. All free, all customisable.</p>
+      <input type="text" id="doc-type-search" class="form-input" placeholder="🔍 Search document types…" oninput="filterDocTypes(this.value)" style="max-width:400px;margin-bottom:1rem;"/>
+      <div class="doc-type-grid">
+        <div class="doc-type-card" onclick="selectDocType('letterhead')" data-type="letterhead" data-tags="letterhead header official"><div class="doc-type-icon">📜</div><div class="doc-type-name">Letterhead</div><div class="doc-type-desc">Official school header</div></div>
+        <div class="doc-type-card" onclick="selectDocType('certificate')" data-type="certificate" data-tags="certificate award merit"><div class="doc-type-icon">🏆</div><div class="doc-type-name">Certificate</div><div class="doc-type-desc">6 types · merit, completion</div></div>
+        <div class="doc-type-card" onclick="selectDocType('banner')" data-type="banner" data-tags="flyer banner event"><div class="doc-type-icon">📢</div><div class="doc-type-name">Flyer / Banner</div><div class="doc-type-desc">Events & promos</div></div>
+        <div class="doc-type-card" onclick="selectDocType('id-card')" data-type="id-card" data-tags="id card identity qr"><div class="doc-type-icon">🪪</div><div class="doc-type-name">ID Card</div><div class="doc-type-desc">Student/staff with QR</div></div>
+        <div class="doc-type-card" onclick="selectDocType('report-card')" data-type="report-card" data-tags="report card result grade"><div class="doc-type-icon">📊</div><div class="doc-type-name">Report Card</div><div class="doc-type-desc">Auto-graded results</div></div>
+        <div class="doc-type-card" onclick="selectDocType('official-letter')" data-type="official-letter" data-tags="letter admission transfer"><div class="doc-type-icon">✉️</div><div class="doc-type-name">Official Letter</div><div class="doc-type-desc">Admission, transfer</div></div>
+        <div class="doc-type-card" onclick="selectDocType('timetable')" data-type="timetable" data-tags="timetable exam schedule"><div class="doc-type-icon">📅</div><div class="doc-type-name">Exam Timetable</div><div class="doc-type-desc">Printable schedule</div></div>
+        <div class="doc-type-card" onclick="selectDocType('admission-form')" data-type="admission-form" data-tags="admission form enrolment"><div class="doc-type-icon">📝</div><div class="doc-type-name">Admission Form</div><div class="doc-type-desc">Enrolment form</div></div>
+        <div class="doc-type-card" onclick="selectDocType('fee-receipt')" data-type="fee-receipt" data-tags="fee receipt payment invoice"><div class="doc-type-icon">🧾</div><div class="doc-type-name">Fee Receipt</div><div class="doc-type-desc">Payment receipt</div></div>
+        <div class="doc-type-card" onclick="selectDocType('newsletter')" data-type="newsletter" data-tags="newsletter news"><div class="doc-type-icon">📰</div><div class="doc-type-name">Newsletter</div><div class="doc-type-desc">One-page newsletter</div></div>
+        <div class="doc-type-card" onclick="selectDocType('permission-slip')" data-type="permission-slip" data-tags="permission consent excursion"><div class="doc-type-icon">✋</div><div class="doc-type-name">Permission Slip</div><div class="doc-type-desc">Parent consent</div></div>
+        <div class="doc-type-card" onclick="selectDocType('academic-calendar')" data-type="academic-calendar" data-tags="calendar academic"><div class="doc-type-icon">🗓️</div><div class="doc-type-name">Academic Calendar</div><div class="doc-type-desc">Full-year calendar</div></div>
+        <div class="doc-type-card" onclick="selectDocType('staff-payslip')" data-type="staff-payslip" data-tags="payslip salary wages"><div class="doc-type-icon">💰</div><div class="doc-type-name">Staff Payslip</div><div class="doc-type-desc">Monthly salary slip</div></div>
+        <div class="doc-type-card" onclick="selectDocType('transfer-letter')" data-type="transfer-letter" data-tags="transfer leaving"><div class="doc-type-icon">🔄</div><div class="doc-type-name">Transfer Letter</div><div class="doc-type-desc">Leaving certificate</div></div>
+        <div class="doc-type-card" onclick="selectDocType('lesson-note')" data-type="lesson-note" data-tags="lesson note plan"><div class="doc-type-icon">📖</div><div class="doc-type-name">Lesson Note</div><div class="doc-type-desc">Lesson plan format</div></div>
+        <div class="doc-type-card" onclick="selectDocType('fee-voucher')" data-type="fee-voucher" data-tags="voucher payment due"><div class="doc-type-icon">💳</div><div class="doc-type-name">Fee Voucher</div><div class="doc-type-desc">Payment instruction</div></div>
+        <div class="doc-type-card" onclick="selectDocType('suspension-letter')" data-type="suspension-letter" data-tags="suspension discipline"><div class="doc-type-icon">🚫</div><div class="doc-type-name">Suspension Letter</div><div class="doc-type-desc">Formal notice</div></div>
+        <div class="doc-type-card" onclick="selectDocType('clearance-form')" data-type="clearance-form" data-tags="clearance leaving graduating"><div class="doc-type-icon">✅</div><div class="doc-type-name">Clearance Form</div><div class="doc-type-desc">Dept clearance</div></div>
+        <!-- v6 new doc types -->
+        <div class="doc-type-card" onclick="selectDocType('transcript')" data-type="transcript" data-tags="transcript cumulative result"><div class="doc-type-icon">🎓</div><div class="doc-type-name">Cumulative Transcript <span class="ent-badge">v6</span></div><div class="doc-type-desc">Multi-term/session</div></div>
+        <div class="doc-type-card" onclick="selectDocType('visitor-badge')" data-type="visitor-badge" data-tags="visitor badge security"><div class="doc-type-icon">🚪</div><div class="doc-type-name">Visitor Badge <span class="ent-badge">v6</span></div><div class="doc-type-desc">Printable badge</div></div>
+        <div class="doc-type-card" onclick="selectDocType('exam-paper')" data-type="exam-paper" data-tags="exam paper questions"><div class="doc-type-icon">📋</div><div class="doc-type-name">Exam Paper <span class="ent-badge">v6</span></div><div class="doc-type-desc">From question bank</div></div>
+        <div class="doc-type-card" onclick="selectDocType('library-card')" data-type="library-card" data-tags="library card borrow"><div class="doc-type-icon">📚</div><div class="doc-type-name">Library Card <span class="ent-badge">v6</span></div><div class="doc-type-desc">Borrower card</div></div>
+        <div class="doc-type-card" onclick="selectDocType('asset-tag')" data-type="asset-tag" data-tags="asset inventory tag"><div class="doc-type-icon">🏷️</div><div class="doc-type-name">Asset Tag <span class="ent-badge">v6</span></div><div class="doc-type-desc">Inventory label</div></div>
+        <div class="doc-type-card" onclick="selectDocType('parent-notice')" data-type="parent-notice" data-tags="parent notice discipline merit"><div class="doc-type-icon">👨‍👩‍👧</div><div class="doc-type-name">Parent Notice <span class="ent-badge">v6</span></div><div class="doc-type-desc">Discipline/merit notice</div></div>
+        <div class="doc-type-card" onclick="selectDocType('continuous-assessment')" data-type="continuous-assessment" data-tags="ca continuous assessment"><div class="doc-type-icon">📈</div><div class="doc-type-name">CA Sheet <span class="ent-badge">v6</span></div><div class="doc-type-desc">Continuous Assessment</div></div>
+        <div class="doc-type-card" onclick="selectDocType('class-timetable')" data-type="class-timetable" data-tags="timetable class schedule"><div class="doc-type-icon">🗓️</div><div class="doc-type-name">Class Timetable <span class="ent-badge">v6</span></div><div class="doc-type-desc">Weekly schedule</div></div>
+        <div class="doc-type-card" onclick="selectDocType('staff-id-card')" data-type="staff-id-card" data-tags="staff id card"><div class="doc-type-icon">🪪</div><div class="doc-type-name">Staff ID Card <span class="ent-badge">v6</span></div><div class="doc-type-desc">With dept &amp; QR</div></div>
+        <div class="doc-type-card" onclick="selectDocType('inventory-report')" data-type="inventory-report" data-tags="inventory report"><div class="doc-type-icon">📦</div><div class="doc-type-name">Inventory Report <span class="ent-badge">v6</span></div><div class="doc-type-desc">Asset register summary</div></div>
+        <div class="doc-type-card" onclick="selectDocType('library-overdue')" data-type="library-overdue" data-tags="overdue library fine"><div class="doc-type-icon">⏰</div><div class="doc-type-name">Overdue Notice <span class="ent-badge">v6</span></div><div class="doc-type-desc">Library reminder</div></div>
+        <div class="doc-type-card" onclick="selectDocType('soap-note')" data-type="soap-note" data-tags="clinic soap health"><div class="doc-type-icon">🧪</div><div class="doc-type-name">SOAP Note <span class="v7-badge">v7</span></div><div class="doc-type-desc">Clinic record</div></div>
+        <div class="doc-type-card" onclick="selectDocType('transport-pass')" data-type="transport-pass" data-tags="bus pass transport"><div class="doc-type-icon">🚌</div><div class="doc-type-name">Bus Pass <span class="v7-badge">v7</span></div><div class="doc-type-desc">Transport pass with QR</div></div>
+        <div class="doc-type-card" onclick="selectDocType('transport-roster')" data-type="transport-roster" data-tags="bus roster transport"><div class="doc-type-icon">📋</div><div class="doc-type-name">Bus Roster <span class="v7-badge">v7</span></div><div class="doc-type-desc">Daily passenger list</div></div>
+        <div class="doc-type-card" onclick="selectDocType('cafe-menu')" data-type="cafe-menu" data-tags="cafeteria menu food"><div class="doc-type-icon">🍱</div><div class="doc-type-name">Cafeteria Menu <span class="v7-badge">v7</span></div><div class="doc-type-desc">Weekly menu poster</div></div>
+        <div class="doc-type-card" onclick="selectDocType('meal-ticket')" data-type="meal-ticket" data-tags="meal ticket food"><div class="doc-type-icon">🎫</div><div class="doc-type-name">Meal Ticket <span class="v7-badge">v7</span></div><div class="doc-type-desc">Cafeteria voucher</div></div>
+        <div class="doc-type-card" onclick="selectDocType('homework-sheet')" data-type="homework-sheet" data-tags="homework assignment"><div class="doc-type-icon">📚</div><div class="doc-type-name">Homework Sheet <span class="v7-badge">v7</span></div><div class="doc-type-desc">Assignment handout</div></div>
+      </div>
+      <div class="step-actions"><button class="btn-ghost" onclick="goToStep(1)">← Back</button><button class="btn-primary" id="proceed-to-step3" onclick="proceedToStep3()" disabled>Customise →</button></div>
+    </div></div>
+
+    <!-- STEP 3: CUSTOMISE -->
+    <div class="gen-step" id="step-3"><div class="step-content">
+      <h2 class="step-heading" tabindex="-1" id="customise-title">✏️ Customise</h2>
+      <p class="step-sub" id="customise-subtitle">Fill in details. Preview updates live.</p>
+      <div class="template-ctrl-bar"><label class="form-label" style="margin:0;">📁 Templates:</label><select id="template-select" class="form-input" style="max-width:200px;" onchange="loadTemplate(this.value)"><option value="">— Load template —</option></select><input type="text" id="template-name-input" class="form-input" placeholder="Name…" style="max-width:160px;"/><button class="btn-sm" onclick="saveTemplate()">💾 Save</button><button class="btn-sm btn-danger" onclick="deleteTemplate()">🗑</button></div>
+      <div class="watermark-bar"><label class="form-label" style="margin:0;">💧 Watermark:</label><select id="wm-preset" onchange="applyWMPreset(this.value)" class="form-input" style="max-width:140px;"><option value="">None</option><option>DRAFT</option><option>COPY</option><option>CONFIDENTIAL</option><option>SAMPLE</option><option value="custom">Custom…</option></select><input type="text" id="wm-custom" class="form-input" placeholder="Text" style="max-width:160px;display:none;"/><select id="wm-opacity" class="form-input" style="max-width:100px;"><option value="0.08">Light</option><option value="0.15" selected>Medium</option><option value="0.28">Heavy</option></select><input type="color" id="wm-color" value="#888888" class="color-picker" style="width:32px;height:32px;"/></div>
+      <div class="live-preview-panel" id="live-preview-panel"><div class="live-preview-label"><span>👁️ Live Preview</span><button class="btn-sm" onclick="toggleLivePreview()">Hide</button></div><div class="live-preview-wrap" id="live-preview-wrap"><div id="live-preview-doc"></div></div></div>
+      <div id="customise-fields"></div>
+      <div class="step-actions"><button class="btn-ghost" onclick="goToStep(2)">← Back</button><button class="btn-primary" onclick="generateAndPreview()">Generate →</button></div>
+    </div></div>
+
+    <!-- STEP 4: DOWNLOAD -->
+    <div class="gen-step" id="step-4"><div class="step-content">
+      <h2 class="step-heading" tabindex="-1">👁️ Preview &amp; Download</h2>
+      <div class="preview-toolbar">
+        <button class="btn-primary" onclick="downloadPDF()">⬇️ PDF</button>
+        <button class="btn-secondary" onclick="downloadPNG()">🖼️ PNG</button>
+        <button class="btn-secondary" onclick="downloadJPG()">📷 JPG</button>
+        <button class="btn-ghost" onclick="addToQueue()">➕ Queue</button>
+        <button class="btn-ghost" onclick="window.print()">🖨️ Print</button>
+        <button class="btn-ghost" onclick="shareWhatsApp()">📲 WhatsApp</button>
+        <button class="btn-ghost" onclick="copyDocLink()">🔗 Copy</button>
+        <button class="btn-ghost" onclick="goToStep(3)">✏️ Edit</button>
+      </div>
+      <div class="zoom-bar"><label class="form-label" style="margin:0;">Zoom:</label><button class="btn-sm" onclick="zoomPreview(-0.1)">－</button><span id="zoom-level" style="font-family:var(--font-mono);min-width:40px;text-align:center;">100%</span><button class="btn-sm" onclick="zoomPreview(0.1)">＋</button><button class="btn-sm" onclick="resetZoom()">Reset</button></div>
+      <div class="preview-wrapper"><div id="doc-preview-container" style="transform-origin:top center;transition:transform .2s;"></div></div>
+      <div class="step-actions" style="margin-top:2rem;"><button class="btn-ghost" onclick="goToStep(3)">← Back</button><button class="btn-primary" onclick="goToStep(2)">New Document ↗</button></div>
+    </div></div>
+  </div>
+</div></section>
+
+<!-- TEMPLATES GALLERY -->
+<section class="templates-gallery-section" id="templates-gallery"><div class="section-container">
+  <div class="section-header"><span class="section-tag">TEMPLATES</span><h2 class="section-title">Saved Templates</h2></div>
+  <div class="tgallery-toolbar">
+    <input type="text" id="tgallery-search" class="form-input" placeholder="🔍 Search…" oninput="filterTemplates(this.value)" style="max-width:250px;"/>
+    <button class="btn-sm btn-danger" onclick="clearAllTemplates()">🗑 Clear All</button>
+    <button class="btn-sm" onclick="exportAllTemplates()">📤 Export</button>
+    <button class="btn-sm" onclick="document.getElementById('import-templates-input').click()">📥 Import</button>
+    <input type="file" id="import-templates-input" accept=".json" style="display:none" onchange="importTemplates(event)"/>
+  </div>
+  <div id="tgallery-list" class="tgallery-list"><p class="history-empty">No templates saved yet.</p></div>
+</div></section>
+
+<!-- STUDENT RECORDS -->
+<section class="records-section" id="students"><div class="section-container">
+  <div class="section-header"><span class="section-tag">STUDENTS</span><h2 class="section-title">Student Records</h2><p class="section-sub">Full database. CSV import/export. Link to batch generation.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showStudentModal()">+ Add Student</button>
+    <button class="btn-sm" onclick="document.getElementById('student-csv-import').click()">📥 Import CSV</button>
+    <button class="btn-sm" onclick="exportStudentCSV()">📤 Export CSV</button>
+    <button class="btn-sm" onclick="downloadStudentCSVTemplate()">⬇️ Template</button>
+    <input type="file" id="student-csv-import" accept=".csv" style="display:none" onchange="importStudentCSV(event)"/>
+    <input type="text" id="student-search" class="form-input" placeholder="🔍 Search…" oninput="filterStudentTable()" style="max-width:220px;margin-left:auto;"/>
+  </div>
+  <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Name</th><th>Class</th><th>Adm No.</th><th>Gender</th><th>Phone</th><th>Balance</th><th>Actions</th></tr></thead><tbody id="students-tbody"><tr><td colspan="7" class="empty-table">No students yet</td></tr></tbody></table></div>
+  <div style="margin-top:1rem;display:flex;gap:.8rem;flex-wrap:wrap;">
+    <button class="btn-secondary" onclick="batchFromStudents()">⚡ Batch Generate</button>
+    <button class="btn-sm" onclick="promoteAllStudents()">📈 Promote All (Next Class)</button>
+    <button class="btn-sm" onclick="openWhatsAppBlast('students')">📲 WhatsApp Blast</button>
+    <button class="btn-sm" onclick="openEmailBlast('students')">📧 Email Blast</button>
+  </div>
+</div></section>
+
+<!-- STAFF RECORDS -->
+<section class="records-section" id="staff"><div class="section-container">
+  <div class="section-header"><span class="section-tag">STAFF</span><h2 class="section-title">Staff Records</h2><p class="section-sub">Manage staff. Generate payslips and ID cards.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showStaffModal()">+ Add Staff</button>
+    <button class="btn-sm" onclick="document.getElementById('staff-csv-import').click()">📥 Import CSV</button>
+    <button class="btn-sm" onclick="exportStaffCSV()">📤 Export CSV</button>
+    <input type="file" id="staff-csv-import" accept=".csv" style="display:none" onchange="importStaffCSV(event)"/>
+    <input type="text" id="staff-search" class="form-input" placeholder="🔍 Search…" oninput="filterStaffTable()" style="max-width:220px;margin-left:auto;"/>
+  </div>
+  <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Name</th><th>Position</th><th>Department</th><th>Phone</th><th>Salary</th><th>Status</th><th>Actions</th></tr></thead><tbody id="staff-tbody"><tr><td colspan="7" class="empty-table">No staff yet</td></tr></tbody></table></div>
+  <div style="margin-top:1rem;display:flex;gap:.8rem;flex-wrap:wrap;">
+    <button class="btn-secondary" onclick="batchFromStaff()">⚡ Batch Generate ID Cards</button>
+    <button class="btn-sm" onclick="batchPayslips()">💰 Batch Payslips</button>
+    <button class="btn-sm" onclick="openWhatsAppBlast('staff')">📲 WhatsApp Blast</button>
+    <button class="btn-sm" onclick="openEmailBlast('staff')">📧 Email Blast</button>
+  </div>
+</div></section>
+
+<!-- FEE MANAGEMENT -->
+<section class="records-section" id="fees"><div class="section-container">
+  <div class="section-header"><span class="section-tag">FEES</span><h2 class="section-title">Fee Management</h2><p class="section-sub">Track student fees, record payments, view balances.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showFeeModal()">+ Record Payment</button>
+    <button class="btn-sm" onclick="document.getElementById('fee-structure-import').click()">📥 Import Fee Structure</button>
+    <input type="file" id="fee-structure-import" accept=".csv" style="display:none" onchange="importFeeStructure(event)"/>
+    <select id="fee-class-filter" class="form-input" style="max-width:150px;" onchange="refreshFeeTable()"><option value="">All Classes</option></select>
+    <button class="btn-sm" onclick="exportFeeReport()">📤 Export Report</button>
+  </div>
+  <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Student</th><th>Class</th><th>Total Fees</th><th>Paid</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead><tbody id="fees-tbody"><tr><td colspan="7" class="empty-table">Add students first to manage fees</td></tr></tbody></table></div>
+  <div style="margin-top:1rem;display:flex;gap:1.5rem;font-size:.9rem;" id="fee-summary"><strong>Total Collected:</strong> <span id="fee-total-collected">0</span> &nbsp;|&nbsp; <strong>Total Outstanding:</strong> <span id="fee-total-outstanding">0</span></div>
+  <div id="fees-chart" class="chart-wrap" style="display:none;"></div>
+</div></section>
+
+<!-- ATTENDANCE -->
+<section class="records-section" id="attendance"><div class="section-container">
+  <div class="section-header"><span class="section-tag">ATTENDANCE</span><h2 class="section-title">Daily Attendance</h2><p class="section-sub">Mark and track daily student attendance by class.</p></div>
+  <div class="records-toolbar">
+    <select id="att-class" class="form-input" style="max-width:150px;"><option value="">Select Class</option></select>
+    <input type="date" id="att-date" class="form-input" style="max-width:160px;"/>
+    <button class="btn-primary" onclick="loadAttendanceSheet()">📋 Load Students</button>
+    <button class="btn-sm" onclick="markAllPresent()">✅ All Present</button>
+    <button class="btn-sm btn-primary" onclick="saveAttendance()">💾 Save Attendance</button>
+    <button class="btn-sm" onclick="exportAttendance()">📤 Export</button>
+  </div>
+  <div id="attendance-sheet" class="records-table-wrap"><table class="records-table"><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody id="attendance-tbody"><tr><td colspan="2" class="empty-table">Select class and date above</td></tr></tbody></table></div>
+  <div style="margin-top:1rem;" id="attendance-stats"></div>
+</div></section>
+
+<!-- ═════════════════ v7 ENTERPRISE+ NEW SECTIONS ═════════════════ -->
+
+<!-- LIBRARY -->
+<section class="ent-section" id="library"><div class="section-container">
+  <div class="section-header"><span class="section-tag">LIBRARY <span class="ent-badge">v6</span></span><h2 class="section-title">Library Management</h2><p class="section-sub">Catalog books, track borrow/return, auto-fine overdue books.</p></div>
+  <div class="ent-tabs">
+    <button class="ent-tab active" data-libtab="books" onclick="switchLibTab('books')">📚 Books</button>
+    <button class="ent-tab" data-libtab="loans" onclick="switchLibTab('loans')">🔄 Active Loans</button>
+    <button class="ent-tab" data-libtab="history" onclick="switchLibTab('history')">📜 History</button>
+  </div>
+  <div id="libtab-books">
+    <div class="records-toolbar">
+      <button class="btn-primary" onclick="showBookModal()">+ Add Book</button>
+      <button class="btn-sm" onclick="document.getElementById('book-csv').click()">📥 Import CSV</button>
+      <button class="btn-sm" onclick="exportBooksCSV()">📤 Export CSV</button>
+      <input type="file" id="book-csv" accept=".csv" style="display:none" onchange="importBooksCSV(event)"/>
+      <input type="text" id="book-search" class="form-input" placeholder="🔍 Search…" oninput="renderBooks()" style="max-width:220px;margin-left:auto;"/>
+    </div>
+    <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Title</th><th>Author</th><th>ISBN/Code</th><th>Category</th><th>Copies</th><th>Status</th><th>Actions</th></tr></thead><tbody id="books-tbody"><tr><td colspan="7" class="empty-table">No books yet</td></tr></tbody></table></div>
+  </div>
+  <div id="libtab-loans" style="display:none">
+    <div class="records-toolbar">
+      <button class="btn-primary" onclick="showLoanModal()">+ Issue Book</button>
+      <button class="btn-sm" onclick="exportLoansCSV()">📤 Export Loans</button>
+    </div>
+    <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Book</th><th>Borrower</th><th>Issued</th><th>Due</th><th>Days Left</th><th>Fine</th><th>Actions</th></tr></thead><tbody id="loans-tbody"><tr><td colspan="7" class="empty-table">No active loans</td></tr></tbody></table></div>
+    <p style="font-size:.8rem;color:var(--ink-muted);margin-top:.5rem;">Fine: ₦50/day after due date (configurable in Library Settings).</p>
+  </div>
+  <div id="libtab-history" style="display:none">
+    <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Book</th><th>Borrower</th><th>Issued</th><th>Returned</th><th>Fine Paid</th></tr></thead><tbody id="loan-history-tbody"><tr><td colspan="5" class="empty-table">No history yet</td></tr></tbody></table></div>
+  </div>
+</div></section>
+
+<!-- INVENTORY -->
+<section class="ent-section" id="inventory"><div class="section-container">
+  <div class="section-header"><span class="section-tag">INVENTORY <span class="ent-badge">v6</span></span><h2 class="section-title">Asset Register</h2><p class="section-sub">Track school assets, custodians, condition, straight-line depreciation.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showAssetModal()">+ Add Asset</button>
+    <button class="btn-sm" onclick="document.getElementById('asset-csv').click()">📥 Import CSV</button>
+    <button class="btn-sm" onclick="exportAssetsCSV()">📤 Export CSV</button>
+    <input type="file" id="asset-csv" accept=".csv" style="display:none" onchange="importAssetsCSV(event)"/>
+    <select id="asset-cat-filter" class="form-input" style="max-width:160px;" onchange="renderAssets()"><option value="">All Categories</option></select>
+    <input type="text" id="asset-search" class="form-input" placeholder="🔍 Search…" oninput="renderAssets()" style="max-width:220px;margin-left:auto;"/>
+  </div>
+  <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Asset</th><th>Tag</th><th>Category</th><th>Custodian</th><th>Acquired</th><th>Cost</th><th>Net Value</th><th>Condition</th><th>Actions</th></tr></thead><tbody id="assets-tbody"><tr><td colspan="9" class="empty-table">No assets yet</td></tr></tbody></table></div>
+  <div id="assets-chart" class="chart-wrap" style="display:none;"></div>
+</div></section>
+
+<!-- TIMETABLE BUILDER -->
+<section class="ent-section" id="timetable"><div class="section-container">
+  <div class="section-header"><span class="section-tag">TIMETABLE <span class="ent-badge">v6</span></span><h2 class="section-title">Class Timetable Builder</h2><p class="section-sub">Click any cell to assign Subject + Teacher. Conflicts flagged automatically.</p></div>
+  <div class="records-toolbar">
+    <select id="tt-class-select" class="form-input" style="max-width:160px;" onchange="loadTimetable()"><option value="">Select class…</option></select>
+    <button class="btn-sm" onclick="clearTimetable()">🗑 Clear Grid</button>
+    <button class="btn-sm" onclick="exportTimetable()">📤 Export</button>
+    <button class="btn-sm" onclick="printTimetable()">🖨️ Print</button>
+  </div>
+  <div id="timetable-grid" class="tt-grid" style="margin-top:1rem;"></div>
+  <p style="font-size:.8rem;color:var(--ink-muted);margin-top:.5rem;">Periods Mon–Fri × 8 slots. Red cells indicate teacher conflicts across classes.</p>
+</div></section>
+
+<!-- DISCIPLINE -->
+<section class="ent-section" id="discipline"><div class="section-container">
+  <div class="section-header"><span class="section-tag">DISCIPLINE <span class="ent-badge">v6</span></span><h2 class="section-title">Behaviour &amp; Merits Log</h2><p class="section-sub">Track incidents and merit points. Generate parent notices.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showDiscModal()">+ Log Incident / Merit</button>
+    <select id="disc-filter" class="form-input" style="max-width:160px;" onchange="renderDiscipline()"><option value="">All</option><option value="incident">Incidents</option><option value="merit">Merits</option></select>
+    <button class="btn-sm" onclick="exportDisciplineCSV()">📤 Export</button>
+    <input type="text" id="disc-search" class="form-input" placeholder="🔍 Search…" oninput="renderDiscipline()" style="max-width:220px;margin-left:auto;"/>
+  </div>
+  <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Date</th><th>Student</th><th>Type</th><th>Points</th><th>Description</th><th>Action Taken</th><th>Actions</th></tr></thead><tbody id="disc-tbody"><tr><td colspan="7" class="empty-table">No entries yet</td></tr></tbody></table></div>
+</div></section>
+
+<!-- VISITORS -->
+<section class="ent-section" id="visitors"><div class="section-container">
+  <div class="section-header"><span class="section-tag">VISITORS <span class="ent-badge">v6</span></span><h2 class="section-title">Visitor Log</h2><p class="section-sub">Sign in/out visitors, print badges, daily security report.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showVisitorModal()">+ Sign In Visitor</button>
+    <input type="date" id="visitor-date-filter" class="form-input" style="max-width:160px;" onchange="renderVisitors()"/>
+    <button class="btn-sm" onclick="exportVisitorsCSV()">📤 Export Day Report</button>
+  </div>
+  <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Name</th><th>Phone</th><th>Visiting</th><th>Purpose</th><th>In</th><th>Out</th><th>Actions</th></tr></thead><tbody id="visitors-tbody"><tr><td colspan="7" class="empty-table">No visitors today</td></tr></tbody></table></div>
+</div></section>
+
+<!-- EXAM BANK -->
+<section class="ent-section" id="exam-bank"><div class="section-container">
+  <div class="section-header"><span class="section-tag">EXAM BANK <span class="ent-badge">v6</span></span><h2 class="section-title">Question Bank &amp; Paper Generator</h2><p class="section-sub">Store questions per Subject + Class. Randomly assemble exam papers (no AI).</p></div>
+  <div class="ent-tabs">
+    <button class="ent-tab active" data-extab="bank" onclick="switchExamTab('bank')">📥 Bank</button>
+    <button class="ent-tab" data-extab="paper" onclick="switchExamTab('paper')">📝 Generate Paper</button>
+  </div>
+  <div id="extab-bank">
+    <div class="records-toolbar">
+      <button class="btn-primary" onclick="showQuestionModal()">+ Add Question</button>
+      <button class="btn-sm" onclick="document.getElementById('q-csv').click()">📥 Import CSV</button>
+      <button class="btn-sm" onclick="exportQuestionsCSV()">📤 Export CSV</button>
+      <input type="file" id="q-csv" accept=".csv" style="display:none" onchange="importQuestionsCSV(event)"/>
+      <select id="q-subj-filter" class="form-input" style="max-width:160px;" onchange="renderQuestions()"><option value="">All Subjects</option></select>
+      <select id="q-class-filter" class="form-input" style="max-width:160px;" onchange="renderQuestions()"><option value="">All Classes</option></select>
+    </div>
+    <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Subject</th><th>Class</th><th>Type</th><th>Question</th><th>Difficulty</th><th>Actions</th></tr></thead><tbody id="questions-tbody"><tr><td colspan="6" class="empty-table">No questions yet</td></tr></tbody></table></div>
+  </div>
+  <div id="extab-paper" style="display:none">
+    <div class="form-grid" style="max-width:700px;">
+      <div class="form-group"><label class="form-label">Subject</label><select id="exam-subj" class="form-input"></select></div>
+      <div class="form-group"><label class="form-label">Class</label><select id="exam-class" class="form-input"></select></div>
+      <div class="form-group"><label class="form-label"># Questions</label><input type="number" id="exam-count" class="form-input" value="20" min="1" max="200"/></div>
+      <div class="form-group"><label class="form-label">Duration (mins)</label><input type="number" id="exam-dur" class="form-input" value="60" min="5"/></div>
+      <div class="form-group form-group-full"><label class="form-label">Paper Title</label><input type="text" id="exam-title" class="form-input" placeholder="e.g. First Term Examination 2025"/></div>
+    </div>
+    <button class="btn-primary" onclick="generateExamPaper()" style="margin-top:1rem;">🎲 Generate Random Paper</button>
+    <div id="exam-paper-output" style="margin-top:1rem;"></div>
+  </div>
+</div></section>
+
+
+<!-- ═════════════════ v7 ENTERPRISE PLUS SECTIONS ═════════════════ -->
+
+<!-- HEALTH / CLINIC -->
+<section class="ent-section" id="clinic"><div class="section-container">
+  <div class="section-header"><span class="section-tag">CLINIC <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Health / Clinic Records (SOAP)</h2><p class="section-sub">Track student visits, vaccinations, allergies, medication, and injuries with structured SOAP notes.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showClinicModal()">+ New Record</button>
+    <button class="btn-sm" onclick="exportClinicCSV()">📤 Export CSV</button>
+    <input type="text" id="clinic-search" class="form-input" placeholder="🔍 Search…" oninput="renderClinic()" style="max-width:220px;margin-left:auto;"/>
+  </div>
+  <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Date</th><th>Student</th><th>Type</th><th>Complaint</th><th>Diagnosis</th><th>Actions</th></tr></thead><tbody id="clinic-tbody"><tr><td colspan="6" class="empty-table">No clinic records</td></tr></tbody></table></div>
+</div></section>
+
+<!-- TRANSPORT -->
+<section class="ent-section" id="transport"><div class="section-container">
+  <div class="section-header"><span class="section-tag">TRANSPORT <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Bus Routes &amp; Assignments</h2><p class="section-sub">Manage buses, drivers, routes, student assignments, and print daily rosters.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showBusModal()">+ Add Bus</button>
+  </div>
+  <div id="buses-list" style="margin-top:1rem;"></div>
+  <div class="ent-card" style="margin-top:1.5rem;">
+    <h4>Assign Student to Bus</h4>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:.5rem;">
+      <select id="ba-bus" class="form-input" style="max-width:240px;"></select>
+      <select id="ba-student" class="form-input" style="max-width:240px;"></select>
+      <button class="btn-sm btn-primary" onclick="assignBus()">→ Assign</button>
+      <button class="btn-sm btn-danger" onclick="unassignBus()">✕ Unassign</button>
+    </div>
+  </div>
+</div></section>
+
+<!-- CAFETERIA -->
+<section class="ent-section" id="cafeteria"><div class="section-container">
+  <div class="section-header"><span class="section-tag">CAFETERIA <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Weekly Menu &amp; Meal Tickets</h2><p class="section-sub">Edit the weekly menu (auto-saves). Print menu posters or batch meal tickets.</p></div>
+  <div id="cafe-menu"></div>
+  <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+    <button class="btn-secondary" onclick="printWeeklyMenu()">🖨️ Print Weekly Menu</button>
+    <button class="btn-sm" onclick="printMealTickets()">🎫 Batch Meal Tickets (all students)</button>
+  </div>
+</div></section>
+
+<!-- HOSTEL -->
+<section class="ent-section" id="hostel"><div class="section-container">
+  <div class="section-header"><span class="section-tag">HOSTEL <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Hostel / Dormitory Management</h2><p class="section-sub">Rooms colour-coded: green = empty, yellow = partial, red = full. Click any room to assign occupants.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showRoomModal()">+ Add Room</button>
+  </div>
+  <div id="rooms-grid" style="margin-top:1rem;"></div>
+</div></section>
+
+<!-- HOMEWORK -->
+<section class="ent-section" id="homework"><div class="section-container">
+  <div class="section-header"><span class="section-tag">HOMEWORK <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Assignment Tracker</h2><p class="section-sub">Set assignments per class, track submissions per student (pending / submitted / late / missing).</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showHomeworkModal()">+ Add Assignment</button>
+  </div>
+  <div id="hw-list" style="margin-top:1rem;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;"></div>
+</div></section>
+
+<!-- QUIZ PLAYER -->
+<section class="ent-section" id="quiz"><div class="section-container">
+  <div class="section-header"><span class="section-tag">QUIZ PLAYER <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">In-Browser Quiz (Offline)</h2><p class="section-sub">Students answer randomly selected questions from the Exam Bank. Auto-graded for questions with answer keys.</p></div>
+  <div class="form-grid" style="max-width:700px;">
+    <div class="form-group"><label class="form-label">Subject</label><select id="qz-subj" class="form-input"><option value="">(any)</option></select></div>
+    <div class="form-group"><label class="form-label">Class</label><select id="qz-class" class="form-input"><option value="">(any)</option></select></div>
+    <div class="form-group"><label class="form-label"># Questions</label><input id="qz-count" type="number" class="form-input" value="10" min="1" max="100"/></div>
+  </div>
+  <button class="btn-primary" style="margin-top:.5rem;" onclick="startQuiz()">▶ Start Quiz</button>
+  <div id="quiz-stage" style="margin-top:1rem;"></div>
+  <p style="font-size:.8rem;color:var(--ink-muted);margin-top:1rem;">Tip: Add questions in the <a href="#exam-bank" style="color:var(--teal);">Exam Bank</a>. Fill the "Answer" field for auto-grading.</p>
+</div></section>
+
+<!-- EVENT CALENDAR -->
+<section class="ent-section" id="calendar"><div class="section-container">
+  <div class="section-header"><span class="section-tag">CALENDAR <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Event Calendar</h2><p class="section-sub">Click any day to add/view events. Dot indicates day has events.</p></div>
+  <div class="cal-controls"><button class="btn-sm" onclick="calPrev()">← Prev</button><div class="cal-month-title" id="cal-month">Month</div><button class="btn-sm" onclick="calNext()">Next →</button></div>
+  <div id="cal-wrap" class="cal-wrap"></div>
+</div></section>
+
+<!-- KPI DASHBOARD -->
+<section class="ent-section" id="kpi-section"><div class="section-container">
+  <div class="section-header"><span class="section-tag">KPI DASHBOARD <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Goals &amp; Targets</h2><p class="section-sub">Track enrolment, fee collection %, attendance %, and library overdues against editable targets.</p></div>
+  <div id="kpi-grid" class="kpi-grid"></div>
+  <div id="trend-charts" style="margin-top:1.5rem;"></div>
+</div></section>
+
+<!-- EXPENSES -->
+<section class="ent-section" id="expenses"><div class="section-container">
+  <div class="section-header"><span class="section-tag">EXPENSES <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Expense / Income Tracker</h2><p class="section-sub">Simple accounting beyond fees. Track utilities, salaries, donations, repairs, etc.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-primary" onclick="showExpenseModal()">+ Record Entry</button>
+    <select id="exp-filter" class="form-input" style="max-width:150px;" onchange="renderExpenses()"><option value="">All</option><option value="income">Income only</option><option value="expense">Expenses only</option></select>
+    <button class="btn-sm" onclick="exportExpensesCSV()">📤 Export CSV</button>
+  </div>
+  <div class="records-table-wrap"><table class="records-table"><thead><tr><th>Date</th><th>Amount</th><th>Category</th><th>Description</th><th>Method</th><th>Ref</th><th>Actions</th></tr></thead><tbody id="exp-tbody"><tr><td colspan="7" class="empty-table">No entries</td></tr></tbody></table></div>
+  <div id="exp-summary" style="margin-top:1rem;font-size:.95rem;"></div>
+</div></section>
+
+<!-- NOTES BOARD -->
+<section class="ent-section" id="notes"><div class="section-container">
+  <div class="section-header"><span class="section-tag">NOTES <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Sticky Notes / Reminders</h2><p class="section-sub">Quick admin/teacher notes per branch. Random pastel colours.</p></div>
+  <div class="records-toolbar"><button class="btn-primary" onclick="addNote()">+ Add Note</button></div>
+  <div id="notes-grid" class="notes-grid" style="margin-top:1rem;"></div>
+</div></section>
+
+<!-- HONOR ROLL -->
+<section class="ent-section" id="honor"><div class="section-container">
+  <div class="section-header"><span class="section-tag">HONOR ROLL <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Top 10 Students</h2></div>
+  <div class="records-toolbar"><button class="btn-primary" onclick="setStudentScore()">+ Set Score</button></div>
+  <div id="honor-roll" style="margin-top:1rem;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;"></div>
+</div></section>
+
+<!-- BULK QR -->
+<section class="ent-section" id="bulk-qr"><div class="section-container">
+  <div class="section-header"><span class="section-tag">BULK QR <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Bulk QR Code Generator</h2><p class="section-sub">Generate QR codes for many URLs/IDs at once. Free, offline.</p></div>
+  <textarea id="bqr-input" class="form-input" rows="5" placeholder="Paste one item per line: URL, student ID, asset tag, anything…" style="max-width:700px;"></textarea>
+  <div style="margin-top:.5rem;display:flex;gap:.5rem;">
+    <button class="btn-primary" onclick="generateBulkQR()">🎯 Generate</button>
+    <button class="btn-sm" onclick="downloadBulkQRZip()">📦 Download ZIP</button>
+  </div>
+  <div id="bqr-output" style="margin-top:1rem;"></div>
+</div></section>
+
+<!-- AUTO ID GENERATOR -->
+<section class="ent-section" id="auto-id"><div class="section-container">
+  <div class="section-header"><span class="section-tag">AUTO ID <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">ID / Admission Number Generator</h2><p class="section-sub">Generate sequential IDs following a pattern. Use <code>{YEAR}</code> and <code>{####}</code> placeholders.</p></div>
+  <div class="form-grid" style="max-width:700px;">
+    <div class="form-group form-group-full"><label class="form-label">Pattern</label><input id="aid-pattern" class="form-input" value="GA/{YEAR}/{####}"/></div>
+    <div class="form-group"><label class="form-label">Start From</label><input id="aid-start" type="number" class="form-input" value="1"/></div>
+    <div class="form-group"><label class="form-label">Count</label><input id="aid-count" type="number" class="form-input" value="20"/></div>
+  </div>
+  <div style="margin-top:.5rem;display:flex;gap:.5rem;">
+    <button class="btn-primary" onclick="genAutoIDs()">🔢 Generate</button>
+    <button class="btn-sm" onclick="copyAutoIDs()">📋 Copy</button>
+  </div>
+  <textarea id="aid-output" class="form-input" rows="6" style="margin-top:.5rem;font-family:monospace;"></textarea>
+</div></section>
+
+<!-- GPA CALCULATOR -->
+<section class="ent-section" id="gpa"><div class="section-container">
+  <div class="section-header"><span class="section-tag">GPA <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">GPA / CGPA Calculator</h2><p class="section-sub">Multi-scale GPA calculator. Format per line: <code>Course, Credits, Score</code></p></div>
+  <div class="form-grid" style="max-width:700px;">
+    <div class="form-group"><label class="form-label">Grading Scale</label><select id="gpa-scale" class="form-input"><option value="ng4">Nigerian 4.0 (≥70 A=4.0)</option><option value="ng5">Nigerian 5.0 (≥70 A=5.0)</option><option value="uk">UK Honours</option><option value="us">US (90-A, 80-B…)</option></select></div>
+  </div>
+  <textarea id="gpa-input" class="form-input" rows="6" style="font-family:monospace;margin-top:.5rem;max-width:700px;" placeholder="Mathematics, 3, 78&#10;English, 2, 65&#10;Physics, 3, 72"></textarea>
+  <div style="margin-top:.5rem;"><button class="btn-primary" onclick="calcGPA()">🧮 Calculate</button></div>
+  <div id="gpa-output" style="margin-top:1rem;background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem;"></div>
+</div></section>
+
+<!-- DATA BUNDLE -->
+<section class="ent-section" id="data-bundle"><div class="section-container">
+  <div class="section-header"><span class="section-tag">DATA EXPORT <span class="v7-badge">v7 NEW</span></span><h2 class="section-title">Export Everything to ZIP of CSVs</h2><p class="section-sub">One-click full export: students, staff, books, assets, questions, clinic, buses, expenses, audit, etc.</p></div>
+  <button class="btn-primary" onclick="exportAllDataBundle()">📦 Download Data Bundle</button>
+  <p style="margin-top:.5rem;font-size:.85rem;color:var(--ink-muted);">Use this for archival, migration to a database, or sharing with auditors.</p>
+</div></section>
+
+<!-- SYNC OVERLAY (hidden by default) -->
+<div class="sync-overlay" id="sync-overlay">
+  <h3>📱 Device Sync via QR</h3>
+  <p style="color:#aaa;text-align:center;max-width:380px;">Scan this QR with the destination device. Open this app on the other device → Settings → Import from QR.</p>
+  <div class="qr-box" id="sync-qr-target"></div>
+  <div id="sync-content"></div>
+  <div class="qr-controls">
+    <button class="btn-sm" onclick="importFromQRData()" style="background:#fff;color:#000;">📥 Import data here</button>
+    <button class="btn-sm" onclick="hideSyncQR()" style="background:#fff;color:#000;">Close</button>
+  </div>
+  <div class="qr-info">Tip: Small datasets (&lt; 1.5 KB) only. For larger, use 🗄️ Backup file.</div>
+</div>
+
+
+<!-- BULK TOOLS -->
+<section class="bulk-section" id="bulk-tools"><div class="section-container">
+  <div class="section-header"><span class="section-tag">BULK</span><h2 class="section-title">Bulk Generation</h2></div>
+  <div class="bulk-grid">
+    <div class="bulk-card"><div class="bulk-card-header"><span class="bulk-icon">🪪</span><h3>Bulk ID Cards</h3></div><p class="bulk-desc">CSV columns: <code>name, class, id_number</code></p><button class="btn-sm" onclick="downloadCSVTemplate('id-card')">⬇️ Template</button><div class="bulk-upload-area" onclick="document.getElementById('bulk-id-csv').click()"><span>📎 Upload CSV</span><input type="file" id="bulk-id-csv" accept=".csv" style="display:none;" onchange="handleBulkCSV('id-card',event)"/></div><div id="bulk-id-results" class="bulk-results"></div><button class="btn-sm" id="bulk-id-zip-btn" style="display:none;" onclick="downloadBulkZip('id-card')">📦 ZIP</button></div>
+    <div class="bulk-card"><div class="bulk-card-header"><span class="bulk-icon">🏆</span><h3>Bulk Certificates</h3></div><p class="bulk-desc">CSV columns: <code>name, certificate_type, award_description</code></p><button class="btn-sm" onclick="downloadCSVTemplate('certificate')">⬇️ Template</button><div class="bulk-upload-area" onclick="document.getElementById('bulk-cert-csv').click()"><span>📎 Upload CSV</span><input type="file" id="bulk-cert-csv" accept=".csv" style="display:none;" onchange="handleBulkCSV('certificate',event)"/></div><div id="bulk-cert-results" class="bulk-results"></div><button class="btn-sm" id="bulk-cert-zip-btn" style="display:none;" onclick="downloadBulkZip('certificate')">📦 ZIP</button></div>
+    <div class="bulk-card"><div class="bulk-card-header"><span class="bulk-icon">🧾</span><h3>Bulk Receipts</h3></div><p class="bulk-desc">CSV columns: <code>name, class, amount, purpose</code></p><button class="btn-sm" onclick="downloadCSVTemplate('fee-receipt')">⬇️ Template</button><div class="bulk-upload-area" onclick="document.getElementById('bulk-rec-csv').click()"><span>📎 Upload CSV</span><input type="file" id="bulk-rec-csv" accept=".csv" style="display:none;" onchange="handleBulkCSV('fee-receipt',event)"/></div><div id="bulk-rec-results" class="bulk-results"></div><button class="btn-sm" id="bulk-rec-zip-btn" style="display:none;" onclick="downloadBulkZip('fee-receipt')">📦 ZIP</button></div>
+  </div>
+</div></section>
+
+<!-- PRINT QUEUE -->
+<section class="print-queue-section" id="print-queue"><div class="section-container">
+  <div class="section-header"><span class="section-tag">PRINT QUEUE</span><h2 class="section-title">Queued Documents</h2></div>
+  <div class="pq-toolbar"><button class="btn-primary" onclick="printAllQueued()" id="pq-print-all-btn" disabled>🖨️ Print All</button><button class="btn-sm btn-danger" onclick="clearQueue()">🗑 Clear</button></div>
+  <div id="print-queue-list" class="pq-list"><p class="history-empty">No documents queued.</p></div>
+</div></section>
+
+<!-- HISTORY -->
+<section class="history-section" id="doc-history"><div class="section-container">
+  <div class="section-header"><span class="section-tag">HISTORY</span><h2 class="section-title">Document History</h2></div>
+  <div class="history-search-bar">
+    <input type="text" id="history-search" class="form-input" placeholder="🔍 Search…" oninput="filterHistory()" style="max-width:250px;"/>
+    <select id="history-type-filter" class="form-input" onchange="filterHistory()" style="max-width:180px;"><option value="">All Types</option><option value="letterhead">Letterhead</option><option value="certificate">Certificate</option><option value="id-card">ID Card</option><option value="report-card">Report Card</option><option value="fee-receipt">Receipt</option><option value="staff-payslip">Payslip</option></select>
+    <button class="btn-sm btn-danger" onclick="clearDocHistory()">🗑 Clear</button>
+  </div>
+  <div id="history-list" class="history-list"><p class="history-empty">No documents yet.</p></div>
+</div></section>
+
+<!-- STATS -->
+<section class="stats-section" id="stats-section"><div class="section-container">
+  <div class="section-header"><span class="section-tag">STATS</span><h2 class="section-title">Usage Statistics</h2></div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-card-num" id="stat-total">0</div><div class="stat-card-label">Documents</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="stat-week">0</div><div class="stat-card-label">This Week</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="stat-profiles">0</div><div class="stat-card-label">Profiles</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="stat-students">0</div><div class="stat-card-label">Students</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="stat-templates">0</div><div class="stat-card-label">Templates</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="stat-revenue">0</div><div class="stat-card-label">Fees Collected</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="stat-books">0</div><div class="stat-card-label">Books</div></div>
+    <div class="stat-card"><div class="stat-card-num" id="stat-assets">0</div><div class="stat-card-label">Assets</div></div>
+  </div>
+  <div class="stats-breakdown" id="stats-breakdown"></div>
+</div></section>
+
+<!-- AUDIT LOG -->
+<section class="ent-section" id="audit"><div class="section-container">
+  <div class="section-header"><span class="section-tag">AUDIT LOG <span class="ent-badge">v6</span></span><h2 class="section-title">Local Audit Trail</h2><p class="section-sub">All CRUD actions logged locally for accountability. Last 500 entries kept.</p></div>
+  <div class="records-toolbar">
+    <button class="btn-sm" onclick="exportAuditCSV()">📤 Export CSV</button>
+    <button class="btn-sm btn-danger" onclick="clearAuditLog()">🗑 Clear</button>
+  </div>
+  <div id="audit-list" style="background:#fff;border:1px solid var(--border);border-radius:12px;max-height:480px;overflow:auto;">
+    <p class="history-empty" style="padding:1.5rem;text-align:center;">No actions logged yet.</p>
+  </div>
+</div></section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about"><div class="section-container">
+  <div class="about-grid">
+    <div class="about-text">
+      <span class="section-tag">BUILT BY</span>
+      <h2 class="section-title">Adewale Samson Adeagbo</h2>
+      <p class="about-desc">Data Scientist · EdTech Builder · AI-Augmented Solutions Developer · Virtual Tutor · FaithTech Builder</p>
+      <p class="about-desc">15+ years in classrooms. 12+ deployed ML/EdTech projects. Director, HMG Concepts (est. 2015).</p>
+      <p class="about-desc"><strong>Enterprise Enhancement v6:</strong> Multi-branch, Library, Inventory, Exam Bank, Timetable, Discipline, Visitors, Audit, PIN lock, Multilingual UI, SVG charts, Birthday alerts. All free. No AI API.</p>
+      <div class="about-links">
+        <a class="about-link" href="https://linkedin.com/in/adewalesamsonadeagbo" target="_blank">🔗 LinkedIn</a>
+        <a class="about-link" href="https://github.com/cssadewale" target="_blank">💻 GitHub</a>
+        <a class="about-link" href="https://cssadewale.pages.dev" target="_blank">🌐 Portfolio</a>
+        <a class="about-link" href="https://wa.me/2348100866322" target="_blank">📞 WhatsApp</a>
+      </div>
+      <div class="social-share-row">
+        <a class="social-btn twitter" href="https://twitter.com/intent/tweet?text=I+use+SchoolDocForge+v6+for+free+school+management!" target="_blank">𝕏</a>
+        <a class="social-btn whatsapp" href="https://wa.me/?text=SchoolDocForge+v6+Enterprise+free+school+ops" target="_blank">💬</a>
+        <a class="social-btn linkedin" href="https://www.linkedin.com/sharing/share-offsite/" target="_blank">💼</a>
+      </div>
+    </div>
+    <div class="about-card"><div class="about-card-inner">
+      <div class="about-avatar">A</div>
+      <div class="about-name">Adewale Samson Adeagbo</div>
+      <div class="about-title-line">Data Scientist · EdTech Builder</div>
+      <div class="about-title-line">AI-Augmented Solutions Developer</div>
+      <div class="about-divider"></div>
+      <div class="about-detail">📍 Lagos, Nigeria</div>
+      <div class="about-detail">📧 buildingmyictcareer@gmail.com</div>
+      <div class="about-detail">📞 +234 810 086 6322</div>
+      <div class="about-detail">📞 +234 809 448 1488</div>
+      <div class="about-detail">🎓 B.Sc.(Ed) CS Ed, LASU (2023)</div>
+      <div class="about-detail">🏫 Director, HMG Concepts</div>
+      <div class="about-detail">📺 youtube.com/@hmgconcepts</div>
+    </div></div>
+  </div>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><span style="font-family:var(--font-display);color:#fff;">SchoolDoc<span class="accent">Forge</span> v7 ENTERPRISE+</span><p>Free. Open source. Offline. No AI API.</p>
+    <div class="footer-badges"><span class="footer-badge">MIT</span><span class="footer-badge">No Login</span><span class="footer-badge">PWA</span><span class="footer-badge">30+ Docs</span><span class="footer-badge">Multi-Branch</span><span class="footer-badge">Library</span><span class="footer-badge">Inventory</span><span class="footer-badge">Exam Bank</span></div></div>
+    <div class="footer-links">
+      <div class="footer-col"><div class="footer-col-title">Platform</div><a href="#generator">Generator</a><a href="#students">Students</a><a href="#staff">Staff</a><a href="#fees">Fees</a><a href="#attendance">Attendance</a></div>
+      <div class="footer-col"><div class="footer-col-title">v7 Modules</div><a href="#library">Library</a><a href="#inventory">Inventory</a><a href="#timetable">Timetable</a><a href="#clinic">Clinic</a><a href="#transport">Transport</a><a href="#hostel">Hostel</a><a href="#quiz">Quiz</a></div>
+      <div class="footer-col"><div class="footer-col-title">Builder</div><a href="https://github.com/cssadewale" target="_blank">GitHub</a><a href="https://linkedin.com/in/adewalesamsonadeagbo" target="_blank">LinkedIn</a><a href="https://cssadewale.pages.dev" target="_blank">Portfolio</a></div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025–2026 SchoolDocForge v7 Enterprise Plus · <strong>Adewale Samson Adeagbo</strong> + Enterprise Plus Layer · MIT · No AI API · No Backend</p></div>
+</footer>
+
+<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+<div class="loading-overlay" id="loading-overlay"><div class="loading-spinner"></div><div class="loading-text" id="loading-text">Generating…</div></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" style="display:none;" onclick="closeModal()"><div class="modal-box" onclick="event.stopPropagation()"><div class="modal-title" id="modal-title">Modal</div><div id="modal-body"></div><div id="modal-footer" style="display:flex;gap:.8rem;margin-top:1rem;justify-content:flex-end;"><button class="btn-ghost" onclick="closeModal()">Cancel</button><button class="btn-primary" id="modal-confirm">Confirm</button></div></div></div>
+
+<!-- v6: PWA UPDATE PROMPT & INSTALL BANNER -->
+<div class="update-prompt" id="update-prompt"><span>✨ A new version is available.</span><button onclick="applyUpdate()">Refresh</button></div>
+<div class="install-banner" id="install-banner"><strong>📲 Install App</strong><p style="font-size:.85rem;margin:.4rem 0;color:var(--ink-muted);">Install SchoolDocForge to your home screen for full offline access.</p><button class="btn-primary" onclick="installApp()">Install</button> <button class="btn-ghost" onclick="document.getElementById('install-banner').style.display='none'">Later</button></div>
+
+<script src="js/app.js"></script>
+<script src="js/generators.js"></script>
+<script src="js/enterprise.js"></script>
+<script src="js/enterprise_plus.js"></script>
+<script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>{
+      navigator.serviceWorker.register('sw.js').then(reg=>{
+        reg.addEventListener('updatefound',()=>{
+          const nw=reg.installing;
+          if(nw)nw.addEventListener('statechange',()=>{ if(nw.state==='installed' && navigator.serviceWorker.controller){ document.getElementById('update-prompt').style.display='flex'; }});
+        });
+      }).catch(()=>{});
+    });
+  }
+  let deferredInstallPrompt=null;
+  window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredInstallPrompt=e; document.getElementById('install-banner').style.display='block'; });
+  function installApp(){ if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt=null;document.getElementById('install-banner').style.display='none';} }
+  function applyUpdate(){ if(navigator.serviceWorker.controller){navigator.serviceWorker.controller.postMessage({type:'SKIP_WAITING'});} location.reload(); }
+</script>
+</body>
+</html>

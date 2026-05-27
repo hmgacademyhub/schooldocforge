@@ -1,0 +1,24 @@
+# GitHub Pages configuration
+title: SchoolDocForge v7 Enterprise Plus
+description: >
+  Free PWA for generating 30+ school documents and managing students,
+  staff, fees, attendance, library, inventory, exam bank, timetable,
+  discipline, and visitors. Offline-capable. No backend. No AI API.
+theme: jekyll-theme-minimal
+plugins:
+  - jekyll-relative-links
+
+# Tell Jekyll NOT to process these — we want raw static files served as-is
+include:
+  - manifest.json
+  - sw.js
+  - .well-known
+exclude:
+  - README.md
+  - LICENSE
+  - CHANGELOG.md
+  - CONTRIBUTING.md
+  - docs/
+  - sample-data/
+  - .github/
+  - .gitignore
