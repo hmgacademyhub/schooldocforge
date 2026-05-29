@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="SchoolDocForge icon">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1a2e4a"/><stop offset="1" stop-color="#0d7377"/></linearGradient></defs>
+  <rect width="512" height="512" rx="92" fill="url(#g)"/>
+  <path d="M96 198 256 96l160 102-160 74L96 198Z" fill="#f0c254"/>
+  <path d="M142 230v98c0 36 52 66 114 66s114-30 114-66v-98l-114 53-114-53Z" fill="#fff" opacity=".96"/>
+  <path d="M407 214v112" stroke="#f0c254" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="407" cy="352" r="22" fill="#f0c254"/>
+  <text x="256" y="462" font-family="Georgia,serif" font-size="54" text-anchor="middle" fill="#fff" font-weight="700">SDF</text>
+</svg>
