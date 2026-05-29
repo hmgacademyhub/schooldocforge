@@ -1,13 +1,24 @@
 /* ═══════════════════════════════════════════════════════════════
-   SchoolDocForge v6 — Service Worker
+   SchoolDocForge v7.2 — Service Worker
    Strategy: cache-first for app shell, network-first for HTML.
    Bump CACHE version to push updates to all users.
 ═══════════════════════════════════════════════════════════════ */
-const CACHE = 'sdf-v7-0-0';
+const CACHE = 'sdf-v7-2-0-hmg-enterprise';
 const SHELL = [
   './',
   './index.html',
+  './features.html',
+  './feature-catalog.html',
+  './modules.html',
+  './enterprise.html',
+  './guide.html',
+  './brand.html',
+  './about.html',
+  './contact.html',
   './manifest.json',
+  './icons/icon.svg',
+  './icons/icon-192.svg',
+  './icons/icon-512.svg',
   './css/style.css',
   './js/app.js',
   './js/generators.js',

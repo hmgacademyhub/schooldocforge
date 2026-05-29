@@ -1,35 +1,26 @@
 {
-  "name": "SchoolDocForge v7 Enterprise Plus",
+  "name": "SchoolDocForge v7.2 HMG Enterprise Plus",
   "short_name": "SchoolDocForge",
-  "description": "Free PWA — 40+ school document types and 20+ operations modules: students, staff, fees, attendance, library, inventory, clinic, transport, cafeteria, hostel, homework, quiz, KPI, multi-branch.",
-  "version": "7.0.0",
-  "start_url": "./",
+  "description": "Free PWA in the HMG Academy Ecosystem — 40+ school document types and 20+ operations modules: students, staff, fees, attendance, library, inventory, clinic, transport, cafeteria, hostel, homework, quiz, KPI, multi-branch.",
+  "version": "7.2.0",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#faf8f4",
   "theme_color": "#1a2e4a",
   "icons": [
-    {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='28' fill='%231a2e4a'/%3E%3Ctext x='50%25' y='62%25' text-anchor='middle' font-size='120' fill='%23c9921a'%3E%F0%9F%8F%9B%3C/text%3E%3C/svg%3E",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='72' fill='%231a2e4a'/%3E%3Ctext x='50%25' y='62%25' text-anchor='middle' font-size='320' fill='%23c9921a'%3E%F0%9F%8F%9B%3C/text%3E%3C/svg%3E",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
   ],
   "categories": ["education", "productivity", "business"],
   "lang": "en-NG",
   "shortcuts": [
-    { "name": "Forge a Document", "short_name": "Forge", "url": "./#generator" },
-    { "name": "Student Records",  "short_name": "Students", "url": "./#students" },
-    { "name": "Library",          "short_name": "Library",  "url": "./#library" },
-    { "name": "Clinic",           "short_name": "Clinic",   "url": "./#clinic" },
-    { "name": "KPI Dashboard",    "short_name": "KPIs",     "url": "./#kpi-section" }
+    { "name": "Forge a Document", "short_name": "Forge", "url": "./index.html#generator" },
+    { "name": "Student Records",  "short_name": "Students", "url": "./index.html#students" },
+    { "name": "Library",          "short_name": "Library",  "url": "./index.html#library" },
+    { "name": "Clinic",           "short_name": "Clinic",   "url": "./index.html#clinic" },
+    { "name": "KPI Dashboard",    "short_name": "KPIs",     "url": "./index.html#kpi-section" },
+    { "name": "Enterprise Control", "short_name": "Enterprise", "url": "./enterprise.html" }
   ]
 }

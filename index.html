@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>SchoolDocForge v7 Enterprise Plus — Complete School Operations Suite</title>
+  <title>SchoolDocForge v7.1 HMG Enterprise Plus — Complete School Operations Suite</title>
   <meta name="description" content="40+ school document types. Students, Staff, Fees, Attendance, Library, Inventory, Clinic, Transport, Cafeteria, Hostel, Homework, Quiz, KPI, Multi-Branch. PWA Offline. 100% Free. No AI API."/>
-  <meta name="author" content="Adewale Samson Adeagbo (original) · Enterprise Enhancement Layer v6"/>
+  <meta name="author" content="Adewale Samson Adeagbo (original) · HMG Academy Ecosystem · Enterprise Plus v7.1"/>
   <meta name="theme-color" content="#1a2e4a"/>
   <link rel="manifest" href="manifest.json"/>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>"/>
-  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="apple-touch-icon" href="icons/icon.svg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Merriweather:wght@400;700&family=Lato:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet"/>
@@ -56,9 +56,9 @@
 <!-- HEADER -->
 <header class="site-header" id="site-header">
   <div class="header-inner">
-    <a class="brand" href="#hero"><span class="brand-icon">🏛️</span><span class="brand-name">SchoolDoc<span class="accent">Forge</span></span><span class="version-badge">v7 ENTERPRISE+</span></a>
-    <nav class="nav-links" id="nav-links">
-      <a href="#features">Features</a><a href="#generator">Generator</a><a href="#students">Students</a><a href="#staff">Staff</a><a href="#fees">Fees</a><a href="#attendance">Attendance</a><a href="#library">Library</a><a href="#inventory">Inventory</a><a href="#clinic">Clinic</a><a href="#transport">Transport</a><a href="#cafeteria">Cafeteria</a><a href="#hostel">Hostel</a><a href="#homework">Homework</a><a href="#exam-bank">Exams</a><a href="#quiz">Quiz</a><a href="#timetable">Timetable</a><a href="#discipline">Discipline</a><a href="#visitors">Visitors</a><a href="#calendar">Calendar</a><a href="#kpi-section">KPI</a><a href="#expenses">Expenses</a><a href="#notes">Notes</a><a href="#stats-section">Stats</a><a href="#about">About</a>
+    <a class="brand" href="#hero"><span class="brand-icon">🏛️</span><span class="brand-name">SchoolDoc<span class="accent">Forge</span></span><span class="version-badge">v7.2 HMG</span></a>
+    <nav class="nav-links" id="nav-links" aria-label="Primary navigation">
+      <a href="index.html#hero">Home</a><a href="features.html">Features</a><a href="feature-catalog.html">Feature Catalog</a><a href="modules.html">Modules</a><a href="enterprise.html">Enterprise</a><a href="index.html#generator">Generator</a><a href="index.html#students">Students</a><a href="index.html#staff">Staff</a><a href="index.html#fees">Fees</a><a href="index.html#attendance">Attendance</a><a href="index.html#library">Library</a><a href="index.html#inventory">Inventory</a><a href="index.html#clinic">Clinic</a><a href="index.html#transport">Transport</a><a href="index.html#cafeteria">Cafeteria</a><a href="index.html#hostel">Hostel</a><a href="index.html#homework">Homework</a><a href="index.html#exam-bank">Exams</a><a href="index.html#quiz">Quiz</a><a href="index.html#calendar">Calendar</a><a href="guide.html">Guide</a><a href="brand.html">HMG Brand</a><a href="about.html">About</a><a href="contact.html">Contact</a>
     </nav>
     <div class="header-actions">
       <button class="btn-icon-hdr" onclick="document.getElementById('print-queue').scrollIntoView({behavior:'smooth'})">🖨️</button>
@@ -73,24 +73,41 @@
 <!-- MOBILE NAV -->
 <div class="mobile-nav" id="mobile-nav">
   <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
-  <a href="#features" onclick="closeMobileNav()">Features</a>
-  <a href="#generator" onclick="closeMobileNav()">Generator</a>
-  <a href="#templates-gallery" onclick="closeMobileNav()">Templates</a>
-  <a href="#students" onclick="closeMobileNav()">Students</a>
-  <a href="#staff" onclick="closeMobileNav()">Staff</a>
-  <a href="#fees" onclick="closeMobileNav()">Fees</a>
-  <a href="#attendance" onclick="closeMobileNav()">Attendance</a>
-  <a href="#library" onclick="closeMobileNav()">Library</a>
-  <a href="#inventory" onclick="closeMobileNav()">Inventory</a>
-  <a href="#timetable" onclick="closeMobileNav()">Timetable</a>
-  <a href="#discipline" onclick="closeMobileNav()">Discipline</a>
-  <a href="#visitors" onclick="closeMobileNav()">Visitors</a>
-  <a href="#exam-bank" onclick="closeMobileNav()">Exam Bank</a>
-  <a href="#bulk-tools" onclick="closeMobileNav()">Bulk</a>
-  <a href="#print-queue" onclick="closeMobileNav()">Queue</a>
-  <a href="#stats-section" onclick="closeMobileNav()">Stats</a>
-  <a href="#audit" onclick="closeMobileNav()">Audit Log</a>
-  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="index.html#hero" onclick="closeMobileNav()">Home</a>
+  <a href="features.html" onclick="closeMobileNav()">Features</a>
+  <a href="feature-catalog.html" onclick="closeMobileNav()">Feature Catalog</a>
+  <a href="modules.html" onclick="closeMobileNav()">Modules</a>
+  <a href="enterprise.html" onclick="closeMobileNav()">Enterprise</a>
+  <a href="index.html#generator" onclick="closeMobileNav()">Generator</a>
+  <a href="index.html#templates-gallery" onclick="closeMobileNav()">Templates</a>
+  <a href="index.html#students" onclick="closeMobileNav()">Students</a>
+  <a href="index.html#staff" onclick="closeMobileNav()">Staff</a>
+  <a href="index.html#fees" onclick="closeMobileNav()">Fees</a>
+  <a href="index.html#attendance" onclick="closeMobileNav()">Attendance</a>
+  <a href="index.html#library" onclick="closeMobileNav()">Library</a>
+  <a href="index.html#inventory" onclick="closeMobileNav()">Inventory</a>
+  <a href="index.html#clinic" onclick="closeMobileNav()">Clinic</a>
+  <a href="index.html#transport" onclick="closeMobileNav()">Transport</a>
+  <a href="index.html#cafeteria" onclick="closeMobileNav()">Cafeteria</a>
+  <a href="index.html#hostel" onclick="closeMobileNav()">Hostel</a>
+  <a href="index.html#homework" onclick="closeMobileNav()">Homework</a>
+  <a href="index.html#exam-bank" onclick="closeMobileNav()">Exam Bank</a>
+  <a href="index.html#quiz" onclick="closeMobileNav()">Quiz</a>
+  <a href="index.html#timetable" onclick="closeMobileNav()">Timetable</a>
+  <a href="index.html#discipline" onclick="closeMobileNav()">Discipline</a>
+  <a href="index.html#visitors" onclick="closeMobileNav()">Visitors</a>
+  <a href="index.html#calendar" onclick="closeMobileNav()">Calendar</a>
+  <a href="index.html#kpi-section" onclick="closeMobileNav()">KPI</a>
+  <a href="index.html#expenses" onclick="closeMobileNav()">Expenses</a>
+  <a href="index.html#notes" onclick="closeMobileNav()">Notes</a>
+  <a href="index.html#bulk-tools" onclick="closeMobileNav()">Bulk</a>
+  <a href="index.html#print-queue" onclick="closeMobileNav()">Queue</a>
+  <a href="index.html#stats-section" onclick="closeMobileNav()">Stats</a>
+  <a href="index.html#audit" onclick="closeMobileNav()">Audit Log</a>
+  <a href="guide.html" onclick="closeMobileNav()">Guide</a>
+  <a href="brand.html" onclick="closeMobileNav()">HMG Brand</a>
+  <a href="about.html" onclick="closeMobileNav()">About</a>
+  <a href="contact.html" onclick="closeMobileNav()">Contact</a>
 </div>
 <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileNav()"></div>
 
@@ -779,12 +796,14 @@
       <span class="section-tag">BUILT BY</span>
       <h2 class="section-title">Adewale Samson Adeagbo</h2>
       <p class="about-desc">Data Scientist · EdTech Builder · AI-Augmented Solutions Developer · Virtual Tutor · FaithTech Builder</p>
-      <p class="about-desc">15+ years in classrooms. 12+ deployed ML/EdTech projects. Director, HMG Concepts (est. 2015).</p>
-      <p class="about-desc"><strong>Enterprise Enhancement v6:</strong> Multi-branch, Library, Inventory, Exam Bank, Timetable, Discipline, Visitors, Audit, PIN lock, Multilingual UI, SVG charts, Birthday alerts. All free. No AI API.</p>
+      <p class="about-desc">15+ years in classrooms. 12+ deployed ML/EdTech projects. Founder/Director, HMG Concepts (His Marvellous Grace Educational Consult, est. 2015) — HMG Academy · HMG Technologies · HMG Media.</p>
+      <p class="about-desc"><strong>HMG Academy Ecosystem:</strong> SchoolDocForge is part of the HMG Technologies toolchain serving virtual schooling, school administration, exam preparation and data-informed learning across Nigeria.</p><p class="about-desc"><strong>Enterprise Plus v7.1:</strong> Multi-branch, Library, Inventory, Clinic, Transport, Hostel, Exam Bank, Timetable, Discipline, Visitors, Audit, PIN lock, Multilingual UI, SVG charts, Birthday alerts. All free. No AI API.</p>
       <div class="about-links">
         <a class="about-link" href="https://linkedin.com/in/adewalesamsonadeagbo" target="_blank">🔗 LinkedIn</a>
         <a class="about-link" href="https://github.com/cssadewale" target="_blank">💻 GitHub</a>
         <a class="about-link" href="https://cssadewale.pages.dev" target="_blank">🌐 Portfolio</a>
+        <a class="about-link" href="https://hmgacademy.pages.dev" target="_blank">🎓 HMG Academy</a>
+        <a class="about-link" href="https://hmgconcepts.pages.dev" target="_blank">🏢 HMG Concepts</a>
         <a class="about-link" href="https://wa.me/2348100866322" target="_blank">📞 WhatsApp</a>
       </div>
       <div class="social-share-row">
@@ -804,7 +823,8 @@
       <div class="about-detail">📞 +234 810 086 6322</div>
       <div class="about-detail">📞 +234 809 448 1488</div>
       <div class="about-detail">🎓 B.Sc.(Ed) CS Ed, LASU (2023)</div>
-      <div class="about-detail">🏫 Director, HMG Concepts</div>
+      <div class="about-detail">🏫 Founder/Director, HMG Concepts</div>
+      <div class="about-detail">🎓 HMG Academy Ecosystem</div>
       <div class="about-detail">📺 youtube.com/@hmgconcepts</div>
     </div></div>
   </div>
@@ -818,10 +838,10 @@
     <div class="footer-links">
       <div class="footer-col"><div class="footer-col-title">Platform</div><a href="#generator">Generator</a><a href="#students">Students</a><a href="#staff">Staff</a><a href="#fees">Fees</a><a href="#attendance">Attendance</a></div>
       <div class="footer-col"><div class="footer-col-title">v7 Modules</div><a href="#library">Library</a><a href="#inventory">Inventory</a><a href="#timetable">Timetable</a><a href="#clinic">Clinic</a><a href="#transport">Transport</a><a href="#hostel">Hostel</a><a href="#quiz">Quiz</a></div>
-      <div class="footer-col"><div class="footer-col-title">Builder</div><a href="https://github.com/cssadewale" target="_blank">GitHub</a><a href="https://linkedin.com/in/adewalesamsonadeagbo" target="_blank">LinkedIn</a><a href="https://cssadewale.pages.dev" target="_blank">Portfolio</a></div>
+      <div class="footer-col"><div class="footer-col-title">Builder & Brand</div><a href="about.html">About Adewale</a><a href="brand.html">HMG Ecosystem</a><a href="https://github.com/cssadewale" target="_blank">GitHub</a><a href="https://linkedin.com/in/adewalesamsonadeagbo" target="_blank">LinkedIn</a><a href="https://cssadewale.pages.dev" target="_blank">Portfolio</a></div>
     </div>
   </div>
-  <div class="footer-bottom"><p>© 2025–2026 SchoolDocForge v7 Enterprise Plus · <strong>Adewale Samson Adeagbo</strong> + Enterprise Plus Layer · MIT · No AI API · No Backend</p></div>
+  <div class="footer-bottom"><p>© 2025–2026 SchoolDocForge v7.1 Enterprise Plus · <strong>Adewale Samson Adeagbo</strong> · HMG Academy Ecosystem · MIT · No AI API · No Backend</p></div>
 </footer>
 
 <button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
