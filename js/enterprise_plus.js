@@ -8,7 +8,7 @@
 ═══════════════════════════════════════════════════════════════ */
 'use strict';
 
-const V7_VERSION = '7.0.0-enterprise-plus';
+const V7_VERSION = '7.1.0-enterprise-plus-hmg';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Render all v7 modules
@@ -37,8 +37,8 @@ function initTheme(){
   applyTheme(t);
 }
 function applyTheme(t){
-  document.body.classList.remove('theme-sepia','theme-hc','theme-solarized','dark');
-  if(t === 'dark') document.body.classList.add('dark');
+  document.body.classList.remove('theme-sepia','theme-hc','theme-solarized','dark','dark-mode');
+  if(t === 'dark') document.body.classList.add('dark','dark-mode');
   else if(t === 'sepia') document.body.classList.add('theme-sepia');
   else if(t === 'hc') document.body.classList.add('theme-hc');
   else if(t === 'solarized') document.body.classList.add('theme-solarized');

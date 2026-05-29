@@ -8,7 +8,7 @@
 'use strict';
 
 /* ── GLOBAL STATE ── */
-const APP_VERSION = '6.0.0-enterprise';
+const APP_VERSION = '7.1.0-enterprise-plus-hmg';
 const SDF = {
   state: {
     currentStep: 1,
@@ -75,10 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* ── DARK MODE ── */
 function initDarkMode(){
-  if(localStorage.getItem('sdf_dark')==='1') document.body.classList.add('dark');
+  if(localStorage.getItem('sdf_dark')==='1' || localStorage.getItem('sdf_theme')==='dark') document.body.classList.add('dark','dark-mode');
 }
 function toggleDarkMode(){
   document.body.classList.toggle('dark');
+  document.body.classList.toggle('dark-mode', document.body.classList.contains('dark'));
   const isDark = document.body.classList.contains('dark');
   localStorage.setItem('sdf_dark', isDark?'1':'0');
   const btn = document.getElementById('dark-mode-toggle');
@@ -125,7 +126,7 @@ function initScroll(){
 /* ── MOBILE NAV ── */
 function closeMobileNav(){
   document.getElementById('mobile-nav')?.classList.remove('open');
-  document.getElementById('mobile-nav-overlay')?.classList.remove('open');
+  document.getElementById('mobile-nav-overlay')?.classList.remove('open','show');
 }
 window.closeMobileNav = closeMobileNav;
 
